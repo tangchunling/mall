@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<body>
+		<button style="padding:10px;width:100%;text-align: center;">加入购物车</button>
+		
+		<script src="http://res.jiuqu1688.com/js/jquery.js"></script>
+		<script src="http://res.jiuqu1688.com/js/base64.js"></script>
+		<script type="text/javascript">
+			$("button").click(function(){
+				var data = {appId:"wx0c9852e89b7f9af0",nonceStr:"kxvht6nn9xmx93d6",package:"prepay_id=wx2016052420182843d8721d640601266027",paySign:"877BE2F6CD0AD7CD07A15AEAF0A52A42",signType:"MD5",timeStamp:"1464092345"};
+				var prepay = data;
+				console.log(data.appId)
+				if (typeof WeixinJSBridge == "undefined"){
+					if( document.addEventListener ){
+						document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+					}else if (document.attachEvent){
+						document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+						document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+					}
+				}else{	
+					onBridgeReady(prepay);
+				}
+
+			})
+			function onBridgeReady(p){
+					WeixinJSBridge.invoke('getBrandWCPayRequest',p,function(res){
+						alert(JSON.stringify(res));
+						if(res.err_msg.indexOf('ok') >=0  ) {
+							$('#pay').remove();
+							$('#waitForPayment').addClass('white themeBgColor');
+							$('#paid').addClass('white themeBgColor');
+							alert('支付成功');
+						}
+						// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+						else{
+							
+							alert(res.stringify());
+						}
+					});
+				}
+		</script>
+	</body>
+</html>

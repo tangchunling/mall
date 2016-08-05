@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head style="height: 100%">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>商品列表</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/index.css" />
+		<style>
+			body{background: #f5f5f5;}
+		</style>
+	</head>
+	<body>
+		<header style="position: fixed;z-index: 999;width:100%;background: #fff;">
+			<div class="list-nav">
+				<ul>
+					<li id="new">
+						<a href="">新品</a>
+					</li>
+					<li id="sall">
+						<a>销量<img src="../resource/images/un.png" alt="" /></a>
+					</li>
+					<li id="price">
+						<a>价格<img src="../resource/images/un.png" alt="" /></a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<div class="mui-content" style="padding-top:42px;background: #f5f5f5;">	
+			<div>
+				<div class="pro-list">
+					
+					<ul style="overflow: hidden;">
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item" href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item index-active" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/iconfont-faxian-sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+		<script id="product" type="text/x-handlebars-template">
+			{{#each product}}
+			<li>
+				<a href="product.html?itemId={{this.itemId}}&&shopId={{../product.shopId}}" data-itemid="{{this.itemId}}" data-shopid="{{this.shopId}}">
+					<div class="img">
+						{{#if this.isPromote}}
+							<img src="../resource/images/sales@2x.png" alt="" class="dijia"/>
+						{{/if}}
+						{{#if this.isNew}}
+							<img src="../resource/images/newarrival@2x.png" alt="" class="new"/>
+						{{/if}}
+						<img src="../resource/images/default.png" data-echo="{{../product.imgUrl}}{{this.picture}}_400x400.jpg" alt="" />
+						<span>销量&nbsp;{{this.sold}}</span>
+					</div>
+					<p>{{this.title}}</p>
+					<div class="price">
+						<span class="salePrice">¥{{this.price}}</span>
+						<span class="originalPrice">¥{{this.formerPrice}}</span>
+						<label style="font-size: 12px;color:#666;">{{#if this.sku}}
+								({{this.sku}})
+							{{/if}}</label>
+					</div>
+				</a>
+			</li>
+			{{/each}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/echo.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				page = 0;
+				shopId = getUrlParam("shopId");
+				var type = getUrlParam("type");
+				hadload = false;
+				$("#cartid").attr("href","cart.html?shopId="+shopId);
+	            $("#index").attr("href","index.html?shopId="+shopId);
+	            $("#findid").attr("href","find.html?shopId="+shopId);
+	            $("#personalid").attr("href","personal.html?shopId="+shopId);
+				
+				orderByClause1 = 1;	
+				pullupRefresh(type,5)
+						
+				function pullupRefresh(type,orderByClause){
+					setTimeout(function(){
+						console.log(page)
+						jsonp("/weixin/findItem?requetType=1&version=1.0","post",{shopId:shopId,page:page,orderByClause:orderByClause,type:type},function(data,status){
+							if(data.flag == 0){
+								mui.toast(data.message);
+								hadload = true;
+							}
+							else if(data.flag == 1){
+								data.data.shopId = shopId;
+								var productSource = $("#product").html();
+								var productTemplate = Handlebars.compile(productSource);
+								data.data.imgUrl = imgUrl;
+								data.data.shopId = shopId;
+								var productHtml = productTemplate({product:data.data});
+								$(".pro-list ul").append(productHtml);
+								Echo.init({
+									offset: 0,
+									throttle: 0
+								});
+								page++;
+							}	
+						},function(err){
+							
+						})
+					},0);	
+				}
+				$("#sall").click(function(){
+					$("#price").find("img").attr("src","../resource/images/un.png");
+					$(".pro-list ul").html("");
+					page = 0;
+					hadload = false;
+					pullupRefresh(type,orderByClause1)
+					if(orderByClause1 == 1){
+						$(this).find("img").attr("src","../resource/images/up.png");
+						orderByClause1 = 2;
+					}
+					else{
+						$(this).find("img").attr("src","../resource/images/down.png");
+						orderByClause1 = 1;
+					}
+				})
+				
+				$("#price").click(function(){
+					if(orderByClause1 == 3){
+						$(this).find("img").attr("src","../resource/images/up.png");
+						orderByClause1 = 4;
+					}
+					else if(orderByClause1 == 4){
+						$(this).find("img").attr("src","../resource/images/down.png");
+						orderByClause1 = 3;
+					}
+					else{
+						$(this).find("img").attr("src","../resource/images/down.png");
+						orderByClause1 = 3;
+					}
+					$("#sall").find("img").attr("src","../resource/images/un.png");
+					$(".pro-list ul").html("");
+					page = 0;
+					hadload = false;
+					pullupRefresh(type,orderByClause1)		
+					
+				});
+				$("#new").click(function(){
+					$(".pro-list ul").html("");
+					page = 0;
+					hadload = false;
+					orderByClause1 = 5;
+					pullupRefresh(type,orderByClause1)
+				})
+				
+				$(window).scroll(function(){
+					if(!hadload){	
+						if($(this).scrollTop()+$(window).height()==$("body").height()){	
+							setTimeout(pullupRefresh(type,orderByClause1),1000)	
+						}
+					}
+				})
+				
+			});	
+		</script>
+	</body>
+</html>

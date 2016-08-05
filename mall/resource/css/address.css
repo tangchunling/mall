@@ -1,0 +1,25 @@
+/*添加地址*/
+body{background: #eee;}
+.adr-list{padding:10px;border-bottom: 1px solid #eee;color:#444;font-size: 16px;}
+.adr-list input,.adr-list textarea{border:none;outline: none;font-size: 16px;padding:6px 12px;}
+.adr-list textarea{vertical-align: top;font-family: "微软雅黑";font-size: 14px;padding: 0 12px;}
+.adr-list .adritem{display: inline-block;}
+.adr-list .adritem select{padding:6px 18px;border:none;outline: none;background: #fff;font-size: 14px;-webkit-appearance: none;background: url("../images/icon_down.png") no-repeat right center;background-size: 14px;}
+.adr-list .adritem select option{width: 100%;background: #fff;padding:4px 0;}
+#adrcity,#adrcountry{display: none;}
+input[type=checkbox]{-webkit-appearance: none;appearance: none;border: none;outline: none;background: url(../images/icon_circle_unchosen.png) no-repeat center center;width: 20px;height: 20px;background-size: 100%;vertical-align: middle;}
+input[type=checkbox]:checked{background: url(../images/icon_chosen.png) no-repeat center center;border-radius: 50%;background-size: 100%;}
+.setdefault{background: #eee;text-align: center;padding-top:20px;}
+.setdefault input{margin-right:6px;vertical-align: middle;}
+.adrbtn{width: 100%;padding:0 10px;box-sizing: border-box;margin-top:60px;margin-bottom: 20px;}
+.adrbtn button{padding:10px 12px;background: #ef503a;color:#fff;border:1px solid #ef503a;border-radius: 4px;width:100%;font-size: 16px;}
+/*地址列表*/
+.adrcontainer ul{background: #fff;}
+.adrcontainer ul li{overflow: hidden;padding:10px;border-bottom: 1px solid #eee;}
+.adrcontainer ul li .adrlistleft{width:100%;float: left;margin-right:-80px;font-size: 14px;padding-right: 10px;}
+.adrcontainer ul li .adrlistleft p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;color:#666;margin-top:4px;}
+.adrcontainer ul li .adrlistleft .adrlistleftContent>div span:nth-child(2){margin:10px;}
+.adrcontainer ul li .adrlistleft .adrlistleftContent>div span.default{display: inline-block;padding: 0 4px;background: #d63620;color: #fff;font-size: 12px;}
+.adrcontainer ul li .adrlistleft .adrlistleftContent{margin-right: 80px;}
+.adrcontainer ul li .adrlistright img{width:26px;vertical-align: -webkit-baseline-middle;}
+.adrcontainer ul li .adrlistright{width:40px;float: right;text-align: right;border-left: 1px solid #eee;}

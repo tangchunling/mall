@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+		<meta http-equiv="expires" content="0" />
+		<title id="shopname">首页</title>
+		<!--<link rel="stylesheet" href="../resource/css/mui.min.css" />-->
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/index.css" />
+	</head>
+	<body>
+		<div class="mui-content" style="padding-bottom: 50px;">
+			<div class="shopContent">
+			</div>
+			<!--<div class="search">
+				<div class="brand"><span><a href="list.html?shopId=1">品牌</a></span></div>
+				<div class="search-content">
+					<div class="search-input">
+						<div class="mui-input-row mui-search">
+							<input id="txtsearch" type="search" class="mui-input-clear" placeholder="搜索商品">
+						</div>
+					</div>
+					
+				</div>
+				<div class="category">
+					<span><a href="list.html?shopId=1">分类</a></span>
+				</div>
+			</div>-->
+			
+			<div class="commend">
+				<div class="commend-title">
+					<img src="../resource/images/icon_tuijian.png" alt="" class="tuijian-img"/>推荐商品 <a class="more" id="more" href="">更多></a>
+				</div>
+				<div class="commend-container">
+					<div class="pro-list">
+						<ul>
+						</ul>
+					</div>	
+				</div>
+			</div>
+			<div class="shopImformation">
+				<div style="padding:20px 0">
+					<div class="imItem">
+						<label for=""><img src="../resource/images/icon_dingwei.png" alt="" /></label><span id="address"></span>
+					</div>
+					<div class="imItem">
+						<label for=""><img src="../resource/images/icon_dianhua.png" alt="" /></label><span id="mobile"></span>
+					</div>
+				</div>
+				<p>酒趣·提供技术支持</p>
+			</div>
+		</div>
+		<div class="codemask">
+			<div class="codemaskcontent">
+				<div class="codeimg">
+					<p>哈哈哈哈哈</p>
+					<div class="codeimgcontent">
+						<img src="../resource/images/noofficialaccount.png" alt="" width="140"/>
+						<p>啊哦，该商户尚未开通公众号</p>
+					</div>	
+				</div>
+				<button>关闭</button>
+			</div>
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item index-active" href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin_sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_faxian.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+		<script id="shop" type="text/x-handlebars-template">
+			<div class="sign">
+				<img src="{{shop.imgUrl}}{{shop.sign}}" alt="" />
+			</div>
+			<div class="nav">
+				<div class="logo">
+					<div class="logocontent">
+						<img src="{{shop.imgUrl}}{{shop.logo}}" alt="logo" />
+						{{#renzhen shop.status}}{{/renzhen}}
+					</div>
+				</div>
+				<ul>
+					<li>
+						<a href="" id="all">
+							<span style="display:block;height: 22px;color:#ef503a">{{shop.itemNum}}</span>
+							<p>全部商品</p>
+						</a>	
+					</li>
+					<li>
+						<a id="collect">
+							{{#if shop.collectStatus}}
+								<img src="../resource/images/icon_favorites_sel.png" alt="" class="collection"/>
+							{{else}}
+								<img src="../resource/images/icon_favorite.png" alt="" class="collection"/>
+							{{/if}}
+							<p>收藏本店</p>
+							<span id="hide" style="display: none;"></span>
+						</a>	
+					</li>
+					<li>
+						<a>
+							<img src="../resource/images/icon_qrcode.png" alt="" class="watch"/>
+							<p>关注</p>
+						</a>	
+					</li>
+				</ul>
+			</div>
+			<div class="banner">
+				<div id="slideBox" class="slideBox">
+					<div class="hd">
+						<ul></ul>
+					</div>
+					<div class="bd">
+						<ul>
+							{{#each shop.banner}}
+								<li>
+									<a class="pic" href="{{#link this.type}}{{/link}}{{this.imgLink}}"><img src="{{../shop.imgUrl}}{{this.imgUrl}}" /></a>
+								</li>
+							{{/each}}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</script>
+		<script id="product" type="text/x-handlebars-template">
+			{{#each product.pushs}}
+			<li>
+				<a href="product.html?v=201607011728&itemId={{this.itemId}}&shopId={{../product.shopId}}">
+					<div class="img">
+						{{#if this.isPromote}}
+							<img src="../resource/images/sales@2x.png" alt="" class="dijia"/>
+						{{/if}}
+						{{#if this.isNew}}
+							<img src="../resource/images/newarrival@2x.png" alt="" class="new"/>
+						{{/if}}
+						<img src="../resource/images/default.png" data-echo="{{../product.imgUrl}}{{this.picture}}_400x400.jpg" alt="" />
+						<span>销量&nbsp;{{this.sold}}</span>
+					</div>
+					<p>{{this.title}}</p>
+					<div class="price">
+						<span class="salePrice">¥{{this.price}}</span>
+						<span class="originalPrice">¥{{this.formerPrice}}</span>
+						<label style="font-size: 12px;color:#666;">
+							{{#if this.sku}}
+								({{this.sku}})
+							{{/if}}
+						</label>
+					</div>
+				</a>
+			</li>
+			{{/each}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<!--<script type="text/javascript" src="../resource/js/mui.min.js"></script>-->
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/TouchSlide.1.1.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="../resource/js/echo.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+				/*document.getElementById("txtsearch").addEventListener("search", function () {
+	                window.location.href = "list.html?title=" + this.value;
+	            });*/
+	           shopId = getUrlParam("shopId");
+	           $(".more").attr("href","list.html?shopId="+shopId);
+	           $("#cartid").attr("href","cart.html?shopId="+shopId);
+	           $("#index").attr("href","index.html?shopId="+shopId);
+	           $("#findid").attr("href","find.html?shopId="+shopId);
+	           $("#personalid").attr("href","personal.html?shopId="+shopId);
+	           /*$("#personalid")*/
+				getShop();
+				$("#search").click(function(){
+					search($("#searchContent").val());
+				})
+				function getShop(){
+					var shopSource = $("#shop").html();
+					var productSource = $("#product").html();
+					var shopTemplate = Handlebars.compile(shopSource);
+					var productTemplate = Handlebars.compile(productSource);
+
+					jsonp("/weixin/index?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+							console.log(data);
+							
+							status = data.data.collectStatus;
+							data.data.imgUrl = imgUrl;
+							shopdata = data;
+							Handlebars.registerHelper("link",function(item,options){
+						  		var out = "";
+						  		if(item == 1){
+						  			out = "product.html?shopId="+shopId+"&itemId=";
+						  		}
+						  		else if(item == 2){
+						  			out = "list.html?shopId="+shopId+"&brandId=";
+						  		}
+						  		else if(item == 3){
+						  			out = "list.html?shopId="+shopId+"&categoryId=";
+						  		}
+					           return out;
+					         });
+					         Handlebars.registerHelper("renzhen",function(item,options){
+						  		var out = "";
+						  		if(item == 4 || item == 5 || item == 6){
+						  			out = '<img src="../resource/images/renzhen.png" alt="" class="logorenzhen"/>';
+						  		}
+						  		
+					           return out;
+					         });
+							var $body = $('body');
+							document.title = data.data.shopName;
+							var $iframe = $('<iframe src="/favicon.ico"></iframe>');
+							$iframe.on('load',function() {
+							  setTimeout(function() {
+							      $iframe.off('load').remove();
+							  }, 0);
+							}).appendTo($body);
+							$("#address").html(data.data.address);
+							$("#mobile").html("<a href='tel:"+data.data.mobile+"'>"+data.data.mobile+"</a>");
+							$(".codemask .codeimg>p").html(data.data.shopName);
+							var brand = data.data.brands;
+							var categories = data.data.categories;
+							var product = data.data;
+								product.imgUrl = data.data.imgUrl;
+							var shopHtml = shopTemplate({shop:data.data});
+							var productHtml = productTemplate({product:product});
+							share();
+							$(".shopContent").html(shopHtml);
+							$(".commend-container ul").html(productHtml);
+							Echo.init({
+								offset: 0,
+								throttle: 0
+							});
+							$("#all").attr("href","list.html?shopId="+shopId);
+							$("#hide").html(status);
+							if(product.banner.length > 0){
+								TouchSlide({ 
+									slideCell:"#slideBox",
+									titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+									mainCell:".bd ul", 
+									effect:"leftLoop", 
+									autoPage:true,//自动分页
+									autoPlay:true, //自动播放
+									delayTime:400
+								});
+							}
+							
+							$("#collect").click(function(){
+								status = $("#hide").html();
+								if(status == 0){
+									collection(1);	
+								}
+								else if(status == 1){
+									collection(0);
+								}
+							});
+							if(data.data.qrCode){
+								var codehtml = '<img src="'+data.data.imgUrl+data.data.qrCode+'" alt="" width="100%"/><p>长按二维码关注该店</p>';
+								$(".codeimgcontent").html(codehtml);	
+							}
+							$(".watch").parent().click(function(){
+								$(".codemask").show();
+							});
+							$(".codemask button").click(function(){
+								$(".codemask").hide();
+							})
+						},function(err){
+							alert("出错了")
+						});
+				}
+				function collection(state){
+					jsonp("/user/core/collectShop?requestType=1&version=1.0","post",{shopId:shopId,state:state},function(data,status){
+						if(data.flag == -1){
+							isLogin(shopId,null,1,null);
+						}
+						else if(data.flag == 1){
+							if(state == 1){
+								$("#hide").html(1);
+								$(".collection").attr("src","../resource/images/icon_favorites_sel.png");
+							}
+							else{
+								$("#hide").html(0);
+								$(".collection").attr("src","../resource/images/icon_favorite.png");
+							}
+						}	
+					},function(err){
+						alert("出错了")
+					})
+				}
+				/*$(window).scroll(function(){
+					if($(this).scrollTop()>=($(".commend").offset().top-50)){
+						$(".search").addClass("search-fixed");
+					}
+					else{
+						$(".search").removeClass("search-fixed");
+					}
+				})*/
+				
+				/*微信分享*/
+			function share(){
+				var url = window.location.href;
+			    
+			    $.ajax({
+			        type:'get',
+			        url:baseurl+'/weixin/sign?requestType=1&version=1.0',
+			        data:{url:url},
+			        dataType:'JSON',
+			        error:function(err){},
+			        success:function(data,status){
+			            wx.config({
+			                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			                appId: data.appId, // 必填，公众号的唯一标识
+			                timestamp: data.sign.timestamp, // 必填，生成签名的时间戳
+			                nonceStr: data.sign.nonceStr, // 必填，生成签名的随机串
+			                signature: data.sign.signature,// 必填，签名，见附录1
+			                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			            });
+			        },
+			        error: function(data) {
+			          alert("出错了");
+			        }
+			
+			    });
+			    
+			    wx.ready(function() {
+				    var shareUrl = baseurl+"/pages/mall/index.html?shopId="+shopId;//分享产品
+				    var title = shopdata.data.shopName;
+				    var shareImgUrl = shopdata.data.imgUrl+shopdata.data.logo;
+				    wx.onMenuShareTimeline({
+				        title: title,
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				    wx.onMenuShareAppMessage({
+				        title: title,
+				        desc: '给你推荐一家好店 jiuqu1688.com',
+				        // 分享描述
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				
+				        type: '',
+				        // 分享类型,music、video或link，不填默认为link
+				        dataUrl: '',
+				        // 如果type是music或video，则要提供数据链接，默认为空
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				            
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				
+				});
+			}
+			});
+		</script>
+		
+	</body>
+</html>

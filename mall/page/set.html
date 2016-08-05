@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<style>
+			body,.container{background: #eee;}
+			.setcontent ul li{background: #fff;padding:10px;font-size: 14px;}
+			.setcontent ul li:first-child{border-bottom: 1px solid #b5b5b5;}
+			.setcontent ul li span{float: right;}
+			.setcontent ul li span img{width:6px;margin-left: 6px;vertical-align: baseline;}
+			.setcontent ul li span b{font-weight: 400;}
+			.setcontent ul li:last-child{margin-top:10px;}
+			.setmask{position: fixed;background: rgba(0,0,0,0.4);width:100%;top:0;bottom: 0;}
+			.setmask .setmaskcontent{border-radius:4px;text-align: center;width:260px;background: #fff;position: absolute;left:50%;margin-left:-130px;top:120px;}
+			.setmask .setmaskcontent ul li{padding:14px 0;border-bottom: 1px solid #B5B5B5;}
+			.setmask .setmaskcontent ul li input{width:100%;border:0;outline:none;text-align: center;}
+			.setmask .setmaskcontent ul li button{border-radius:4px;width:80%;background: #ef503a;color:#fff;border: none;padding:10px 0;}
+			.setmask .setmaskcontent ul li:last-child{padding:6px 0;}
+			.setcontent ul li a{display: block;overflow: hidden;}
+			.setname,.settel{display: none;}
+			.setmask .setmaskcontent .tel{padding:10px;}
+			.setmask .setmaskcontent .tel li input{border:1px solid #C4C4C4;border-radius: 4px;padding:0 10px;text-align: left;box-sizing: border-box;height: 31px;line-height: 31px;}
+			.setmask .setmaskcontent .tel li{border-bottom: none;}
+			.setmask .setmaskcontent .tel li.code input{width:64%;}
+			.setmask .setmaskcontent .tel li.code button{width:36%;padding:0;height: 31px;line-height: 31px;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="setcontent">
+				<ul>
+					<li>
+						<label>名字</label><span id="name"><b></b><img src="../resource/images/icon_more.png" alt="" /></span>
+					</li>
+					<li>
+						<label>手机号码</label><span id="tel"><b></b><img src="../resource/images/icon_more.png" alt="" /></span>
+					</li>
+					<li>
+						<a href="about.html"><label>关于酒趣</label><span><img src="../resource/images/icon_more.png" alt="" /></span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="setmask setname">
+			<div class="setmaskcontent">
+				<ul>
+					<li>名字</li>
+					<li><input type="text" id="setname"/></li>
+					<li><button id="namebtn">确定</button></li>
+				</ul>
+			</div>
+		</div>
+		<div class="setmask settel">
+			<div class="setmaskcontent">
+				<ul class="tel">
+					<li><input type="tel" id="settel" placeholder="手机号"/></li>
+					<li class="code"><input type="text" id="code" placeholder="验证码"/><button id="codebtn">验证码</button></li>
+					<li><button id="telbtn">确定</button></li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				shopId = getUrlParam("shopId");
+				getsetinfo();
+				$(".setcontent ul li:first-child").click(function(){
+					$(".setname").show();
+				});
+				$(".setcontent ul li:nth-child(2)").click(function(){
+					$(".settel").show();
+				});
+				$("#namebtn").click(function(){
+					$(".setmask").hide();
+					setinfo();
+				});
+				$("#namebtn").click(function(){
+					
+				})
+				function getsetinfo(){
+					jsonp("/user/core/my_info?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+		           		console.log(data);
+		           		if(data.flag == -1){
+		           			isLogin(shopId,null,1,null);
+		           		}
+		           		else{
+		           			$("#name b").html(data.trueName);
+		           			$("#tel b").html(data.mobile);
+		           		}
+		           		
+		           	},function(err){
+		           		alert("出错了")
+		           	})
+				}
+				function setinfo(){
+					var name = $("#setname").val();
+					if(name){
+						jsonp("/user/core/editProfile?requestType=1&version=1.0","post",{trueName:name,shopId:shopId},function(data,status){
+							if(data.flag == 1){
+								getsetinfo()
+							}
+							else if(data.flag == 0){
+								alert(data.message);
+							}
+						},function(err){
+							alert("出错了")
+						})
+					}
+					else{alert("请填写信息");}
+					
+				}
+				$("#codebtn").click(function(){
+		           		var tel = $("#settel").val();
+		           		if(tel && checkSubmitMobil(tel)){
+		           			jsonp("/person/sendMobile?requestType=1&version=1.0","post",{mobile:tel},function(data,status){
+		           				console.log(data);
+		           				if(data.flag == 1){
+		           					alert(data.message);
+		           					time(document.getElementById("codebtn"));
+		           				}
+		           			},function(err){
+		           				alert("出错了")
+		           			})
+		           		}
+		           		else{
+		           			alert("请填写手机号")
+		           		}
+		           });
+		           $("#telbtn").click(function(){
+		           	var tel = $("#settel").val();
+		           	var code = $("#code").val();
+		           	if(code.length == 0){
+		           		alert("请输入验证码");
+		           	}
+		           	else if(tel.length == 0 && name.length == 0){
+		           		alert("请输入完整信息")
+		           	}
+		           	else{
+		           		jsonp("/user/core/editProfile?requestType=1&version=1.0","post",{shopId:shopId,mobile:tel,verifyCode:code},function(data,status){
+							if(data.flag == 1){
+								getsetinfo();
+								$(".setmask").hide();
+							}
+							else if(data.flag == 0){
+								alert(data.message);
+							}
+						},function(err){
+							alert("出错了")
+						})
+		           	}
+		           })
+				function checkSubmitMobil(mobile) { 		
+					if (!mobile.match(/^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/)) { 
+					alert("手机号码格式不正确！"); 
+					return false; 
+					} 
+					return true; 
+				}
+				var wait=60;  
+				function time(o) {  
+				        if (wait == 0) {  
+				            o.removeAttribute("disabled");            
+				            o.innerHTML="获取验证码";  
+				            wait = 60;  
+				        } else {  
+				            o.setAttribute("disabled", true);  
+				            o.innerHTML="倒计时(" + wait + ")";  
+				            wait--;  
+				            setTimeout(function() {  
+				                time(o)  
+				            },  
+				            1000)  
+				        }  
+				    }  
+			})
+		</script>
+	</body>
+</html>

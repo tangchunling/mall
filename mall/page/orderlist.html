@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>订单列表</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/order.css" />
+	</head>
+	<body>
+		<div class="mui-content">
+			<div id="leftTabBox" class="tabBox orderListNav">
+				<div class="hd">
+					<ul>
+						<li class="on"><a>全部<div></div></a></li>
+						<li><a>待付款<div></div></a></li>
+						<li><a>待发货<div></div></a></li>
+						<li><a>待收货<div></div></a></li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+				<div class="orderListContent" style="padding-top: 44px;">
+					<div class="bd" id="tabBox1-bd">
+						<div class="con">
+							<ul>
+							</ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+		
+		<script type="text/x-handlebars-template" id="orderlist">
+				{{#each data}}
+				<li data-id="{{this.orderId}}">
+					<a href="orderdetail.html?orderId={{this.orderId}}&shopId={{../data.shopId}}"><div class="ordershop orderlistshop">{{this.shopName}}<img src="../resource/images/icon_more.png" alt="" />{{#compare this.orderStatus}}{{/compare}}</div>
+					<div class="orderlistContainer">
+						<ul>
+							{{#each this.list}}
+							<li>
+								<div class="orderitemleft">
+									<img src="{{../../data.imgUrl}}{{this.picture}}_150x150.jpg" alt="" />
+								</div>
+								<div class="orderitemmiddle">
+									<p>{{this.productName}}({{this.itemProps}})</p>
+								</div>
+								<div class="orderitemright">
+									<span>¥{{this.price}}</span><br>
+									<span>×{{this.itemNum}}</span>
+									{{#tuikuan ../this.orderStatus this.status}}{{/tuikuan}}
+								</div>
+							</li>
+							{{/each}}
+						</ul>
+					</div>
+					</a>
+					<div class="orderlistfoot">
+						<div class="orderlistnum">
+							<span>共{{this.list.length}}件</span>总金额：<span>¥{{this.orderAmount}}</span>
+						</div>	
+						<div class="orderlistbtn">
+							{{#button this.orderStatus this.orderId this.list this.shippingCode this.shippingName this.invoiceNo}}{{/button}}
+						</div>
+					</div>
+				</li>		
+				{{/each}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/TouchSlide.1.1.js"></script>
+		<script>
+			$(function(){
+				var orderId = getUrlParam("orderid");
+				shopId = getUrlParam("shopId");
+				hadload = false;
+				orderStatus = null;
+				var page = 0;
+				getOrderList(orderStatus);
+				$(".hd ul li").click(function(){
+					$("body").scrollTop(0);
+					page = 0;
+					hadload = false;
+					$(".con>ul").html("");
+					var index = $(this).index();
+					if(index == 0){
+						orderStatus = null;
+						getOrderList(orderStatus);
+					}
+					else{
+						orderStatus = index
+						getOrderList(orderStatus);
+					}
+					$(".hd ul li").removeClass("on");
+					$(this).addClass("on");
+				})
+				function getOrderList(orderStatus){
+					jsonp("/user/core/orderList?requestType=1&version=1.0","post",{orderStatus:orderStatus,page:page,shopId:shopId},function(data,status){
+						console.log(data);
+						Handlebars.registerHelper("compare",function(item,options){
+						  		var out = "";
+						  		if(item == 1){
+						  			out = "<span>待付款</span>";
+						  		}
+						  		else if(item == 2){
+						  			out = "<span>待发货</span>";
+						  		}
+						  		else if(item == 3){
+						  			out = "<span>待收货</span>";
+						  		}
+						  		else if(item == 0){
+						  			out = "<span>交易关闭</span>";
+						  		}
+						  		else if(item == 6){
+						  			out = "<span>交易完成</span>";
+						  		}
+						  		else{
+						  			out = "<span>交易成功</span>";
+						  		}
+					           return out;
+					         });
+					         Handlebars.registerHelper("button",function(item,id,items,shippingCode,shippingName,invoiceNo,options){
+					         	
+						  		var out = "";
+						  		var num = 0;
+						  		for(i=0;i<items.length;i++){
+						  			num += items[i].price * items[i].itemNum;
+						  		}
+						  		if(item == 1){
+						  			out = "<a onclick='closeorder(\""+id+"\")'>取消订单</a><a class='btn-active' href='pay.html?orderid="+id+"&ordersum="+num+"&shopId="+shopId+"'>付款</a>";
+						  		}
+						  		else if(item == 2){
+						  			out = "<a onclick='remindDeliver(\""+id+"\")'>提醒发货</a>";
+						  		}
+						  		else if(item == 3){
+						  			out = "<a href='logistics.html?shopId="+shopId+"&shippingCode="+shippingCode+"&shippingName="+shippingName+"&invoiceNo="+invoiceNo+"'>订单跟踪</a><a class='btn-active' onclick='confirmGoods(\""+orderId+"\")'>确认收货</a>";
+						  		}
+					           return out;
+					         
+					         });
+					          Handlebars.registerHelper("tuikuan",function(item,status,options){
+						  		var out = "";
+						  		
+						  		if(item == 2 || item == 3){
+						  			if(status == -2){
+						  				out = "";
+						  			}
+						  			else if(status == -1){
+						  				out=""
+						  			}
+						  			else{
+						  				out = "<span style='color:#ef503a;font-size:14px;display:block;margin-top:10px;'>退款中</span>";
+						  			}
+						  			
+						  		}
+					           return out;
+					         });
+						if(data.flag == 1){
+								data.data.imgUrl = imgUrl;
+								data.data.shopId = shopId;
+							var orderlistSource = $("#orderlist").html();
+							var orderlistTemplate = Handlebars.compile(orderlistSource);
+							var orderlistHtml = orderlistTemplate({data:data.data});
+							var ordernum = data.orderNum;
+							
+							if(ordernum){
+								var arrs = ordernum.split("_");
+								if(page == 0){
+									$(".con>ul").html("");
+								}
+							  	
+								for(i=0;i<arrs.length;i++){
+									if(arrs[i]>0){
+										$(".hd li").eq(i+1).find("div").html("<span>"+arrs[i]+"</span>");
+									}
+								}
+							}
+							$(".con>ul").append(orderlistHtml);
+							page++;
+						}
+						else if(data.flag == -1){
+							isLogin(shopId,null,1,null);
+						}
+						else if(data.flag == 0 && page == 0){
+							$(".con>ul").html("");
+							hadload = true;
+						}
+						else{
+							hadload = true;
+						}
+						
+						
+					},function(err){
+						
+					});
+				}
+				$(window).scroll(function(){
+					if(!hadload){	
+						if($(this).scrollTop()+$(window).height()==$("body").height()){	
+							setTimeout(getOrderList(orderStatus),1000)	
+						}
+					}
+				})
+				
+				
+			})
+			function closeorder(orderId){
+				if(confirm("是否取消订单？")){
+					jsonp("/user/core/closeOrder?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						if(data.flag == 1){
+							window.location.href = "orderlist.html?shopId="+shopId;
+						}	
+					},function(err){
+						alert("取消订单失败")
+					})
+				}
+			}
+			function confirmGoods(orderId){
+				if(confirm("确认货是否收到？")){
+					jsonp("/user/core/sureOrder?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						console.log(data)
+						if(data.flag == 1){
+							window.location.href = "orderlist.html?shopId="+shopId;
+						}
+						else if(data.flag == 0){
+							alert(data.message)
+						}
+					},function(err){
+						alert("确认收货失败")
+					})
+				}
+			}
+			function remindDeliver(orderId){
+				jsonp("/user/core/remindDeliver?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+					console.log(data)
+					if(data.flag == 1){
+						alert("提醒发货成功")
+					}
+					else if(data.flag == 0){
+						alert(data.message);
+					}
+				},function(err){
+					alert("提醒发货失败")
+				})
+			}
+		</script>
+	</body>
+</html>

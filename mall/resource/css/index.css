@@ -1,0 +1,55 @@
+.banner img{width:100%;display: block;}
+.nav ul li{width:33.33%;text-align: center;float: left;}
+.nav ul li a p{font-size: 13px;color: #333;}
+.nav ul{overflow: hidden;margin-left: 100px;}
+.nav ul li img.collection,.nav ul li img.watch{height:18px;}
+.nav{padding:10px 0;position: relative;}
+.nav .logo{position: absolute;width:75px;height: 75px;border: 1px solid #ccc;top: -40px;left: 10px;background: #ccc;}
+.nav .logo img{width:75px;height: 75px;text-align: center;line-height: 80px;}
+.nav .logo .logocontent{position: relative;}
+.nav .logo .logocontent .logorenzhen{position: absolute;bottom: 4px;width: 80%;height: auto;left:86px;top:10px;}
+.sign img{width:100%;display: block;}
+.search{overflow: hidden;background: #ef503a;color:#fff;height: 49px;padding-top: 8px;}
+.search .brand{width:70px;text-align: center;float: left;height: 34px;line-height: 34px;position: relative;z-index: 99;}
+.search .category{width:70px;text-align: center;float: right;height: 34px;line-height: 34px;}
+.search .search-content{margin: 0 -70px;width:100%;float: left;}
+.search .search-content .search-input{margin: 0 70px;}
+.mui-search .mui-placeholder,.mui-search .mui-placeholder .mui-icon{color:#fff;}
+.search-fixed{position: fixed;z-index: 20;top:0;width:100%;}
+.commend{padding:20px 2% 40px;border-bottom: 1px solid #eee;}
+.commend-title{font-size: 15px;}
+.commend-title a.more{float: right;}
+.commend-title .tuijian-img{width:16px;margin-right: 4px;}
+/*banner*/
+.slideBox{position: relative;}
+.slideBox .hd{position: absolute;width: 100%;text-align: center;}
+.slideBox .hd ul{display: inline-block;font-size: 0;}
+.slideBox .hd ul li{display: inline-block;width:6px;height: 6px;background: #fff;border-radius: 50%;margin:0 6px;overflow: hidden;border:1px solid #ccc;}
+.slideBox .hd ul li.on{background: #ccc;}
+
+.shopImformation .imItem{font-size: 14px;margin:8px 0;padding:0 24px;color: #333;}
+.shopImformation .imItem label{margin-right: 8px;}
+.shopImformation .imItem label img{width:20px;vertical-align: middle;}
+.shopImformation p{text-align: center;padding: 14px 0;border-top: 1px solid #eee;color:#d0d0d0;font-size: 12px;}
+input[type=search]{text-align: left;background: #d43726;border:1px solid #d43726;border-radius: 26px;}
+/*列表*/
+.list-nav ul{overflow: hidden;border-bottom: 1px solid #eee;}
+.list-nav ul li{width:33.33%;float: left;text-align: center;padding:10px 0;color:#666;position: relative;}
+.list-nav ul li:after{position: absolute;content: "";width:1px;height: 16px;background: #ccc;top: 14px;right: 0px;}
+.list-nav ul li:last-child:after{background: #fff;}
+.list-nav ul li img{width:8px;vertical-align: middle;margin-left: 4px;}
+.mui-scroll-wrapper{top:90px;bottom: 50px;}
+.list-content ul li{float:left;width:25%;color:#666;color: #666;text-align: center;font-size: 12px;}
+.list-content ul li a{margin:4px;border:1px solid #eee;padding:4px;display: block;}
+.list-content ul li a img{width:100%;}
+.list-content .brand-content,.list-content .category-content{display: none;position: absolute;background: #fff;padding:10px;width: 100%;z-index: 999;box-shadow: 0px 3px 3px #aaa;}
+.list-content .brand-content ul,.list-content .category-content ul{position: relative;}
+.list-content .brand-content ul:before{position: absolute;content: "";width:0;height:0;border:10px solid transparent;border-bottom-color: #fff;top: -36px;left: 14px;}
+.list-content .category-content ul:before{position: absolute;content: "";width:0;height:0;border:10px solid transparent;border-bottom-color: #fff;top: -36px;right: 14px;}
+.codemask{position: fixed;top:0;bottom: 0;width:100%;background: rgba(0,0,0,0.6);z-index: 22;text-align: center;}
+.codemask .codemaskcontent{width:80%;display: inline-block;margin-top: 180px;}
+.codemask .codemaskcontent button{width:100%;padding:10px;background: #eee;}
+.codeimg{background: #fff;margin-bottom: 10px;border-radius: 4px;padding:10px;}
+.codeimgcontent{width:70%;margin: auto;min-height: 200px;}
+.codeimgcontent p{margin-top:10px;}
+.codemask{display: none;}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>订单详情</title>
+		<link rel="stylesheet" href="../resource/css/mui.min.css" />
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/order.css" />
+		<style>body{background: #eee;}.logistics a{display: block;width: 100%;}</style>
+	</head>
+	<body>
+		<div class="mui-content">
+			
+			<div class="ordershop"></div>
+			<div class="orderlistContainer">
+				<ul></ul>
+			</div>
+			
+			<div class="ordermessage">
+				<p>留言</p>
+				<textarea name="" rows="2" cols=""></textarea>
+			</div>
+			<div class="orderlistcount">
+				<ul>
+					<li>
+						<label for="">商品总额</label><span >¥<b id="sum">0</b></span>
+					</li>
+					<li>
+						<label for="">红包 抵用</label><span id="rednum">-0</span>
+					</li>
+					<!--<li>
+						<label for="">折扣节省</label><span>-0</span>
+					</li>
+					<li>
+						<label for="">商家减免</label><span>-0</span>
+					</li>-->
+				</ul>
+				<div class="orderamount">共<span id="orderprosum">0</span>件 总金额：<span id="orderproamount">0</span></div>
+			</div>
+		</div>
+		<div class="orderbtn">
+			
+		</div>
+		<script type="text/x-handlebars-template" id="odttitle">
+			<div class="orderdetailtitle">
+				<ul>
+					<li>{{#compare data.orderStatus}}{{/compare}}</li>
+					<li><label for="">订单编号：</label><span>{{data.orderId}}</span></li>
+					<li><label for="">下单时间：</label><span>{{data.addTime}}</span></li>
+				</ul>
+			</div>
+			<div class="logistics">
+				<a href="logistics.html?shippingName={{data.shippingName}}&shippingCode={{data.shippingCode}}&invoiceNo={{data.invoiceNo}}&shopId={{data.shopId}}">
+					<label for=""><img src="../resource/images/orderdetail/icon_wuliu.png" alt="" />物流信息</label><span><img src="../resource/images/icon_more.png" alt="" /></span>
+				</a>
+			</div>
+			<div class="odt">
+				<ul>
+					<li>
+						<label for=""><img src="../resource/images/orderdetail/icon_fukuanleixing.png" alt="" />付款类型</label><span>{{#type data.orderType}}{{/type}}</span>
+					</li>
+					<li>
+						<label for=""><img src="../resource/images/orderdetail/icon_zhifujine.png" alt="" />支付金额</label><span>¥{{data.orderAmount}}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="odtadr">
+				<div class="odtadrtitle">
+					<img src="../resource/images/orderdetail/icon_dizhi.png" alt="" /><span class="odtname">{{data.consignee}}</span><span class="odttel">{{data.mobile}}</span>
+				</div>
+				<p>{{data.address}}</p>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="orderlist">
+				{{#each data.list}}
+				<li>
+					<a href="product.html?shopId={{../data.shopId}}&itemId={{this.itemId}}" style="display: block;position: relative;">
+						<div class="orderitemleft">
+							<img src="{{../data.list.imgUrl}}{{this.picture}}_80x80.jpg" alt="" />
+						</div>
+						<div class="orderitemmiddle">
+							<p>{{this.productName}}({{this.itemProps}})</p>
+						</div>
+					</a>
+						<div class="orderitemright">
+							<span>¥{{this.price}}</span><br>
+							<span>×{{this.itemNum}}</span><br>
+							{{#tuikuan ../data.orderStatus this.id ../data.shopId this.status}}{{/tuikuan}}
+						</div>
+					
+				</li>
+				{{/each}}
+		</script>
+		<script type="text/x-handlebars-template" id="operate">
+			{{#button data.orderStatus data.orderId data.list data.shippingCode data.shippingName data.invoiceNo}}{{/button}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				orderId = getUrlParam("orderId");
+				shopId = getUrlParam("shopId");
+				getOrderDetail();
+				function getOrderDetail(){
+					jsonp("/user/core/orderDetail?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						console.log(data);
+						Handlebars.registerHelper("compare",function(item,options){
+						  		var out = "";
+						  		if(item == 1){
+						  			out = "<img src='../resource/images/orderdetail/icon_orderstate.png' /><label>订单状态：</label><span>待付款</span>";
+						  		}
+						  		else if(item == 2){
+						  			out = "<img src='../resource/images/orderdetail/icon_orderstate.png' /><label>订单状态：</label><span>待发货</span>";
+						  		}
+						  		else if(item == 3){
+						  			out = "<img src='../resource/images/orderdetail/icon_orderstate.png' /><label>订单状态：</label><span>待收货</span>";
+						  		}
+						  		else if(item == 0){
+						  			out = "<img src='../resource/images/orderdetail/icon_closestate.png' /><label>订单状态：</label><span>交易关闭</span>";
+						  		}
+						  		else if(item == 6){
+						  			out = "<img src='../resource/images/orderdetail/icon_donestate.png' /><label>订单状态：</label><span>交易完成</span>";
+						  		}
+						  		else{
+						  			out = "<img src='../resource/images/orderdetail/icon_donestate.png' /><label>订单状态：</label><span>交易成功</span>";
+						  		}
+					           return out;
+					         });
+					         Handlebars.registerHelper("tuikuan",function(item,id,shopId,status,options){
+						  		var out = "";
+						  		
+						  		if(item == 2){
+						  			if(status == -2){
+						  				out = "<button onclick='gorefund("+id+","+shopId+")'>申请退款</button>";
+						  			}
+						  			else if(status == -1){
+						  				out=""
+						  			}
+						  			else if(status == 1){
+						  				out= "<button>不同意退款</button>";
+						  			}
+						  			else if(status == 2){
+						  				out= "<button>卖家已同意退款</button>";
+						  			}
+						  			else if(status == 3){
+						  				out= "<button>退款已完成</button>";
+						  			}
+						  			else if(status == 0 || status == 4){
+						  				out = "<button onclick='gorefunddetail("+id+","+shopId+")'>退款中</button>";
+						  			}
+						  			
+						  		}
+						  		else if(item == 3){
+						  			if(status == -2){
+						  				out = "<button onclick='gorefund("+id+","+shopId+")'>申请退款</button>";
+						  			}
+						  			else if(status == -1){
+						  				out=""
+						  			}
+						  			else if(status == 1){
+						  				out= "<button>不同意退款</button>";
+						  			}
+						  			else if(status == 2){
+						  				out= "<button>卖家已同意退款</button>";
+						  			}
+						  			else if(status == 3){
+						  				out= "<button>退款已完成</button>";
+						  			}
+						  			else if(status == 0 || status == 4){
+						  				out = "<button onclick='gorefunddetail("+id+","+shopId+")'>退款中</button>";
+						  			}
+						  		}
+					           return out;
+					         });
+					         Handlebars.registerHelper("type",function(item,options){
+					         	var out = "";
+					         	if(item == 1){
+					         		out = "全额支付"
+					         	}
+					         	else if(item == 2){
+					         		out = "订金支付"
+					         	}
+					         	return out;
+					         })
+					         data.data.list.imgUrl = imgUrl;
+						var orderlistSource = $("#orderlist").html();
+						var orderlistTemplate = Handlebars.compile(orderlistSource);
+						var orderlistHtml = orderlistTemplate({data:data.data});
+						$(".orderlistContainer ul").html(orderlistHtml);
+						$(".ordershop").html(data.data.shopName);
+						$("#sum").html(parseFloat(data.data.itemAmount).toFixed(2));
+						$("#orderprosum").html(data.data.list.length);
+						$("#orderproamount").html(data.data.orderAmount);
+						/*if(data.data.orderAmount > data.data.orderAmount){
+							$("#orderproamount").append("(商户有改价格)")
+						}*/
+						if(data.data.couponMoney){
+							$("#rednum").html("-"+data.data.couponMoney);
+						}
+						
+						data.data.addTime = init(data.data.addTime);
+						data.data.shopId = shopId;
+						var odttitleSource = $("#odttitle").html();
+						var odttitleTemplate = Handlebars.compile(odttitleSource);
+						var odttitleHtml = odttitleTemplate({data:data.data});
+						$(".mui-content").prepend(odttitleHtml);
+						
+						Handlebars.registerHelper("button",function(item,orderId,items,shippingCode,shippingName,invoiceNo,options){
+						  		var out = "";
+						  		var num = 0;
+						  		for(i=0;i<items.length;i++){
+						  			num += items[i].marketPrice * items[i].itemNum;
+						  		}
+						  		if(item == 1){
+						  			out = "<a onclick='closeorder(\""+orderId+"\")'>取消订单</a><a class='btn-active' href='pay.html?orderid="+orderId+"&ordersum="+num+"&shopId="+shopId+"'>付款</a>";
+						  		}
+						  		else if(item == 2){
+						  			out = "<a onclick='remindDeliver(\""+orderId+"\")'>提醒发货</a>";
+						  		}
+						  		else if(item == 3){
+						  			out = "<a href='logistics.html?shopId="+shopId+"&shippingCode="+shippingCode+"&shippingName="+shippingName+"&invoiceNo="+invoiceNo+"'>订单跟踪</a><a class='btn-active' onclick='confirmGoods(\""+orderId+"\")'>确认收货</a>";
+						  		}
+					           return out;
+					         });
+						var operateSource = $("#operate").html();
+						var operateTemplate = Handlebars.compile(operateSource);
+						var operateHtml = operateTemplate({data:data.data});
+						$(".orderbtn").html(operateHtml);
+						if(data.data.orderStatus == 3 || data.data.orderStatus == 4 || data.data.orderStatus == 5 || data.data.orderStatus == 6){
+							
+						}
+						else{
+							$(".logistics").hide();
+						}
+					},function(err){
+						alert("出错了");
+					});
+				}	
+			});
+			function init(t){
+				var d=new Date(t);
+				var year=d.getFullYear();
+				var day=d.getDate();
+				var month=+d.getMonth()+1;
+				var hour=d.getHours();
+				var minute=d.getMinutes();
+				var second=d.getSeconds();
+				var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);	
+				return f;
+			}
+			function formate(d){
+				return d>9?d:'0'+d;
+			}
+			function closeorder(orderId){
+				if(confirm("确认取消订单？")){
+					jsonp("/user/core/closeOrder","post",{orderId:orderId,shopId:shopId},function(data,status){
+						alert(data.message);
+						window.location.href = "orderdetail.html?orderId="+orderId+"&shopId="+shopId;
+					},function(err){
+						alert("取消订单失败")
+					})
+				}
+			}
+			function confirmGoods(orderId){
+				if(confirm("确认货是否收到？")){
+					jsonp("/user/core/sureOrder?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						console.log(data)
+						alert(data.message);
+						if(data.flag == 1){
+							window.location.href = "orderdetail.html?orderId="+orderId+"&shopId="+shopId;
+						}	
+					},function(err){
+						alert("确认收货失败")
+					})
+				}
+			}
+			function remindDeliver(orderId){
+				jsonp("/user/core/remindDeliver?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+					console.log(data)
+					if(data.flag == 1){
+						alert("提醒发货成功")
+					}
+					else if(data.flag == 0){
+						alert(data.message);
+					}
+				},function(err){
+					alert("提醒发货失败")
+				})
+			}
+			function gorefund(id,shopId){
+				window.location.href = "refund.html?orderId="+orderId+"&id="+id+"&shopId="+shopId;
+			}
+			function gorefunddetail(id,shopId){
+				window.location.href = "refunddetail.html?orderId="+orderId+"&id="+id+"&shopId="+shopId;
+			}
+		</script>
+	</body>
+</html>

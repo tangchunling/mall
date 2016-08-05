@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>填写订单</title>
+		<link rel="stylesheet" href="../resource/css/mui.min.css" />
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../resource/css/order.css"/>
+	</head>
+	<body>
+		<div class="mui-content" style="padding-bottom: 104px;">
+			<div class="orderAddress">
+				<div class="orderAddressY">
+					
+				</div>
+				<div class="orderAddressN">
+					<p>添加收货地址</p>
+					<b></b>
+				</div>
+			</div>
+			<div class="order-pay">
+				<ul>
+					<li>
+						<input type="radio" name="orderpay" checked="checked" value="1"/>全额支付
+					</li>
+					<li>
+						<input type="radio" name="orderpay" value="2"/>订金支付
+					</li>
+				</ul>
+			</div>
+			<div class="ordershop"></div>
+			<div class="orderlistContainer">
+				<!--<ul></ul>-->
+			</div>
+			
+			<div class="ordermessage">
+				<p>留言</p>
+				<textarea name="" rows="2" cols=""></textarea>
+			</div>
+			<div class="orderlistcount">
+				<ul>
+					<li>
+						<label for="">商品总额</label><span >¥<b id="sum">0</b></span>
+					</li>
+					<li>
+						<label for="">红包 抵用</label><span id="redsum">-0</span>
+					</li>
+					<!--<li>
+						<label for="">折扣节省</label><span>-0</span>
+					</li>
+					<li>
+						<label for="">商家减免</label><span>-0</span>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+		<div class="settleorder">
+			<div class="settleorderleft">
+				<div class="settleNum">
+					应付总金额：¥<span id="settlesum">0</span>
+				</div>
+			</div>
+			<!--<div class="settleorderright">确认付款</div>-->
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item index-active" href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin_sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_faxian.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+		<script type="text/x-handlebars-template" id="orderlist">
+			<ul>
+				{{#each data.createOrderItemVOList}}
+				<li>
+					<div class="orderlistcontent">
+						<div class="orderitemleft">
+							<img src="{{../data.imgUrl}}{{this.picture}}" alt="" />
+						</div>
+						<div class="orderitemmiddle">
+							<p>{{this.productName}}({{this.itemProps}})</p>
+						</div>
+						<div class="orderitemright">
+							<span>¥{{this.price}}</span><br>
+							<span>×{{this.num}}</span>
+						</div>
+					</div>
+					
+				</li>
+				{{/each}}
+			</ul>
+			{{#if data.couponVOList}}
+				<div class="orderredcontent">
+					<div class="redpapertop">红包<span><img src="../resource/images/icon_down.png" alt="" /></span></div>
+					<ul>
+						{{#each data.couponVOList}}
+						<li>
+							<div class="redlogo">
+								<img src="{{../data.imgUrl}}{{this.shopLogo}}" alt="" />
+							</div>
+							<div class="redmiddle">
+								<div class="redmiddlecontent">
+									<p>{{this.shopName}}</p>
+									<div>{{#time this.endTime}}{{/time}} 到期</div>
+								</div>
+							</div>
+							<div class="redright">
+								<p>¥<span>{{this.counponMoney}}</span></p>
+								{{#hongbao this.minAmount this.moneyType}}{{/hongbao}}
+								<input type="radio" name="redpaper" data-id="{{this.couponId}}" data-money="{{this.counponMoney}}"/>
+							</div>
+						</li>
+						{{/each}}
+						<div class="redpaperother">
+							有钱任性，不适用红包<input type="radio" name="redpaper"/>
+						</div>
+					</ul>
+				</div>
+			{{/if}}
+			
+		</script>
+		
+		<script type="text/x-handlebars-template" id="address">
+			<div class="addressTitle" data-adrid="{{data.id}}">
+				<span class="addname">{{data.consignee}}</span><span class="addtel">{{data.mobile}}</span><span class="addeault">默认</span>
+			</div>
+			<div class="addressContent"><img src="../resource/images/icon_dizhi.png" alt="" /><span>{{data.address}}</span></div>
+			<img src="../resource/images/icon_more.png" alt="" class="order-more"/>
+			<b></b>
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script src="../resource/js/base64.js"></script>
+		<script src="../resource/js/order.js"></script>
+		<script type="text/javascript">
+		
+		</script>
+	</body>
+</html>

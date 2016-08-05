@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>发现</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/swiper.min.css" />
+		<style>
+			.findimg img{width: 100%;}
+			.findcontainer>ul>li{padding:30px 0;}
+			.findcontainer>ul>li>h1{font-size: 15px;color:#666;font-weight: 400;padding:0 10px;}
+			.findcontainer>ul>li>h1>img{width: 18px;vertical-align: middle;margin-right: 4px;}
+			.findcontainer>ul>li>h1 span{float: right;color: #f27362;}
+			.findcontainer>ul>li>h1 span img{width: 6px;vertical-align: baseline;margin-left: 4px;}
+			.pro-list ul li{width: 154px;}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="findimg">
+				<img src="../resource/images/default.png" alt="" />
+			</div>
+			<div class="findcontainer">
+				<ul>
+					
+				</ul>
+			</div>
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item " href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item index-active" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/iconfont-faxian-sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+			
+			<script id="product" type="text/x-handlebars-template">
+				{{#if data.promote.length}}
+				<li>
+					<h1><img src="../resource/images/icon_cuxiao.png" alt="" />促销商品<span onclick="gofindlist(1)">查看所有<img src="../resource/images/icon_more_triangle.png" alt="" /></span></h1>
+					<div class="findcontent">
+						 <div class="swiper-container pro-list">
+					        <ul class="swiper-wrapper findpro">
+					            {{#each data.promote}}
+								<li class="swiper-slide">
+									<a href="product.html?itemId={{this.itemId}}&shopId={{../data.shopId}}">
+										<div class="img">
+											<img src="../resource/images/default.png" data-echo="{{../data.imgUrl}}{{this.picture}}_400x400.jpg" alt="" />
+											<span>销量&nbsp;{{this.sold}}</span>
+										</div>
+										<p>{{this.title}}</p>
+										<div class="price">
+											<span class="salePrice">¥{{this.price}}</span>
+											<span class="originalPrice">¥{{this.formerPrice}}</span>
+											<label style="font-size: 12px;color:#666;">{{#if this.sku}}
+								({{this.sku}})
+							{{/if}}</label>
+										</div>
+									</a>
+								</li>
+								{{/each}}
+					        </ul>
+					       
+					    </div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if data.hot.length}}
+				<li>
+					<h1><img src="../resource/images/icon_hot.png" alt="" />热销商品<span onclick="gofindlist(2)">查看所有<img src="../resource/images/icon_more_triangle.png" alt="" /></span></h1>
+					<div class="findcontent">
+						 <div class="swiper-container pro-list">
+					        <ul class="swiper-wrapper findhot">
+					            {{#each data.hot}}
+								<li class="swiper-slide">
+									<a href="product.html?itemId={{this.itemId}}&shopId={{../data.shopId}}">
+										<div class="img">
+											<img src="../resource/images/default.png" data-echo="{{../data.imgUrl}}{{this.picture}}_400x400.jpg" alt="" />
+											<span>销量&nbsp;{{this.sold}}</span>
+										</div>
+										<p>{{this.title}}</p>
+										<div class="price">
+											<span class="salePrice">¥{{this.price}}</span>
+											<span class="originalPrice">¥{{this.formerPrice}}</span>
+											<label style="font-size: 12px;color:#666;">{{#if this.sku}}
+								({{this.sku}})
+							{{/if}}</label>
+										</div>
+									</a>
+								</li>
+								{{/each}}
+					        </ul>
+					   
+					    </div>
+					</div>
+				</li>
+				{{/if}}
+			</script>
+			<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+			<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+			<script type="text/javascript" src="../resource/js/server.js"></script>
+			<script type="text/javascript" src="../resource/js/common.js"></script>
+			<script type="text/javascript" src="../resource/js/swiper.min.js"></script>
+			<script type="text/javascript" src="../resource/js/echo.min.js"></script>
+			<script type="text/javascript">
+				$(function(){
+				   shopId = getUrlParam("shopId");
+		           $("#cartid").attr("href","cart.html?shopId="+shopId);
+		           $("#index").attr("href","index.html?shopId="+shopId);
+		           $("#findid").attr("href","find.html?shopId="+shopId);
+		           $("#personalid").attr("href","personal.html?shopId="+shopId);
+		           getinfo();
+		           function getinfo(){
+			           	jsonp("/weixin/find?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+			           		console.log(data);
+			           		$(".findimg img").attr("data-echo",imgUrl+data.data.imgUrl);
+			           		var prosource = $("#product").html();
+			           		var protemplate = Handlebars.compile(prosource);
+			           		data.data.imgUrl = imgUrl;
+			           		data.data.shopId = shopId;
+			           		var prohtml = protemplate({data:data.data});
+			           		$(".findcontainer ul").html(prohtml);
+			           		/*var prosource1 = $("#product").html();
+			           		var protemplate1 = Handlebars.compile(prosource1);
+			           		data.data.hot.imgUrl = imgUrl;
+			           		data.data.hot.shopId = shopId;
+			           		var prohtml1 = protemplate1({data:data.data.hot});
+			           		$(".findhot").html(prohtml1);*/
+			           		Echo.init({
+								offset: 0,
+								throttle: 0
+							});
+			           		var swiper = new Swiper('.swiper-container', {
+						        slidesPerView: 'auto',
+						        paginationClickable: true,
+						        spaceBetween: 0,
+						        freeMode: true
+						    });
+			           		
+			           	},function(err){
+			           		alert("出错了");
+			           	})
+		           }
+		           
+				})
+				function gofindlist(type){
+	           		window.location.href = "findlist.html?shopId="+shopId+"&type="+type;
+	           }
+			</script>
+	</body>
+</html>

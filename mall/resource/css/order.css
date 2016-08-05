@@ -1,0 +1,96 @@
+.orderAddress{padding:16px 10px;position: relative;}
+.orderAddress b{position: absolute;bottom: 0;width:100%;height:2px;background: url(../images/rc.png) repeat-x;background-size: 100%;left: 0;}
+.orderAddress .order-more{position: absolute;width:10px;right:10px;top:50%;margin-top: -10px;}
+.orderAddress .addressTitle span.addtel{margin:10px;}
+.orderAddress .addressTitle span.addname{margin-left: 18px;}
+.orderAddress .addressTitle span.addeault{display: inline-block;padding:0 4px;background: #d63620;color:#fff;font-size: 12px;}
+.addressContent{color:#999;font-size: 14px; margin-top: 4px;}
+.addressContent img{width:14px;vertical-align: middle;margin-right: 8px;}
+.order-pay ul li{width:50%;text-align: center;padding:20px 0;float: left;}
+.order-pay ul li input{margin-right: 4px;vertical-align: middle;}
+.order-pay ul{overflow: hidden;border-top: 10px solid #eee;border-bottom: 10px solid #eee;}
+.orderlistContainer>ul{overflow: hidden;border-bottom: 1px solid #eee;padding:0 10px;}
+.orderlistContainer ul li{padding:10px 0;overflow: hidden;border-bottom: 1px solid #eee;}
+.orderlistContainer ul li .orderlistcontent{overflow: hidden;}
+.orderlistContainer>ul>li:last-child{border-bottom: none;}
+.orderlistContainer ul li .orderitemleft{width:80px;float: left;}
+.orderlistContainer ul li .orderitemleft img{width:100%;}
+.orderlistContainer ul li .orderitemmiddle{width:100%;float: left;margin-right:-100px;margin-left:-80px;}
+.orderlistContainer ul li .orderitemmiddle p{margin-right:100px;margin-left:80px;overflow: hidden;height: 42px;line-height: 21px;color: #666;}
+.orderlistContainer ul li .orderitemright{width:100px;float: right;text-align: right;color: #666;}
+.ordershop{padding:10px;border-bottom: 1px solid #eee;}
+.settleorder{position: fixed;/*height:50px;line-height:50px;*/width:100%;bottom: 50px;overflow: hidden;border-bottom: 1px solid #eee;border-top: 1px solid #ccc;z-index: 20;background: #fff;}
+.settleorder .settleorderleft{width:100%;float: left;margin-right: -120px;padding-right: 4px;text-align: right;}
+.settleorder .settleorderleft .settleNum{margin-right: 120px;line-height: 50px;}
+.settleorder .settleorderleft .settleNum.settelactive{padding:4px;line-height: inherit;}
+.settleorder .settleorderleft .settleNum span{color:#ef503a}
+.settleorder .settleorderright{background: #ef503a;text-align: center;color:#fff;width:120px;float: left;height: 50px;line-height: 50px;}
+.ordermessage{padding:10px;border-top: 10px solid #eee;border-bottom: 10px solid #eee;}
+.ordermessage textarea{margin-bottom: 0;}
+.orderlistcount{margin-bottom: 40px;}
+.orderlistcount ul li{padding:10px;font-size: 14px;border-bottom: 1px solid #eee;}
+.orderlistcount ul li span{float: right;}
+input[type=radio]:checked {
+    background: url(../images/icon_pay_chosen.png) no-repeat center center;
+    background-size: 100%;
+}
+input[type=radio] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+    background: url(../images/icon_pay_unchosen.png) no-repeat center center;
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    vertical-align: middle;
+}
+.orderListNav .hd{border-bottom: 1px solid #ccc;position: fixed;width: 100%;background: #fff;z-index: 20;}
+.orderListNav .hd ul li{width:25%;float: left;text-align: center;}
+.orderListNav .hd ul li a{display: block;padding:10px 0;margin:0 14px;position: relative;}
+.orderListNav .hd ul li a span{line-height: 16px;position: absolute;display: inline-block;border: 1px solid #ef503a;color: #fff;background:#ef503a;padding: 0px 4px;font-size: 12px; border-radius: 100%;top:6px;right: -6px;}
+.orderListNav .hd ul li.on a{border-bottom: 2px solid #ef503a;}
+.ordershop.orderlistshop{border-top: 10px solid #eee;}
+.ordershop.orderlistshop img{width:8px;vertical-align: middle;margin-left: 6px;}
+.ordershop.orderlistshop span{float: right;color: #ef503a;}
+.orderlistfoot{padding:10px;text-align: right;color: #666;font-size: 14px;}
+.orderlistfoot .orderlistnum span:first-child{margin-right: 10px;}
+.orderlistfoot .orderlistnum span:last-child{color:#ef503a;}
+.orderlistfoot .orderlistbtn{margin-top:10px;}
+.orderlistfoot .orderlistbtn a{display:inline-block;padding:6px 12px;text-align: center;background: #fff;border: 1px solid #ccc;border-radius: 4px;outline: none;margin-left: 10px;}
+.orderlistfoot .orderlistbtn a.btn-active{background: #ef503a;color:#fff;border-color: #ef503a;}
+/*订单详情*/
+.orderdetailtitle{background: #657585;color: #eee;padding:10px;}
+.orderdetailtitle ul li{font-size: 14px;padding:2px 30px;padding-right: 0;}
+.odt ul li:first-child{border-bottom: 1px solid #eee;}
+.orderdetailtitle ul li img,.odt ul li img{width:18px;vertical-align: middle;margin-left:-26px;margin-right: 8px;}
+.odt ul li span{float: right;}
+.odt ul li{padding:8px 30px;font-size: 14px;padding-right: 0;}
+.odt ul{padding: 10px;border-top:10px solid #eee;border-bottom:10px solid #eee;}
+.odtadr{padding:10px;font-size: 14px;}
+.odtadr .odtadrtitle img{width:14px;vertical-align: middle;margin-left:-24px;margin-right: 8px;}
+.odtadr .odtadrtitle{padding:2px 30px;padding-right: 0;}
+.odtadr .odtadrtitle .odttel{float: right;}
+.odtadr p{padding-left:30px;}
+.orderamount{text-align: right;padding:10px;}
+.orderbtn{position: fixed;width:100%;padding: 20px 10px;bottom: 0;text-align: right;background: #fff;}
+.orderbtn a{display:inline-block;padding:6px 12px;text-align: center;background: #fff;border: 1px solid #ccc;border-radius: 4px;outline: none;margin-left: 10px;}
+.orderbtn a.btn-active{background: #ef503a;color:#fff;border-color: #ef503a;}
+.logistics span{float: right;}
+.logistics{padding:10px;border-top:10px solid #eee;font-size:14px;}
+.logistics label img{width:18px;vertical-align: middle;margin-right: 8px;margin-left: 4px;}
+.logistics span img{width:8px;vertical-align: middle;}
+/*订单红包*/
+.orderredcontent .redpapertop{padding:10px;border-top: 1px solid #eee;border-bottom: 1px solid #eee;margin-bottom: 10px;}
+.orderredcontent .redpapertop span img{width:18px;float: right;margin-top: 6px;}
+.orderredcontent ul li,.redpaperother{padding:10px;border:1px solid #e58579;margin-bottom: 10px;border-radius: 4px;}
+.orderredcontent ul li .redlogo{width:50px;float: left;}
+.orderredcontent ul li .redlogo img{width:50px;}
+.orderredcontent ul li .redmiddle{width:100%;margin-left:-50px;margin-right: -100px;float: left;}
+.orderredcontent ul li .redmiddle .redmiddlecontent{margin-left:50px;margin-right: 100px;padding: 0 8px;font-size: 14px;}
+.orderredcontent ul li .redmiddle .redmiddlecontent p{color:#000;margin-bottom: 10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.orderredcontent ul li .redright{width: 100px;text-align: right;float: right;font-size: 14px;padding-right: 22px;position: relative;}
+.orderredcontent ul li .redright input{position: absolute;right: 0;top: 20px;}
+.redright p span{font-size: 30px;}.redright p{color:#000;margin-bottom: 0;}
+.redpaperother{font-size: 14px;}
+.redpaperother input{float: right;}

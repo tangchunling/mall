@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>选择付款方式</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/pay.css" />
+	</head>
+	<body style="background: #eee;" onbeforeunload="window.history.go(0)">
+		<div class="pay-content">
+			<div class="pay-title">
+				<label class="back"> <img src="../resource/images/icon_left.png"/> </label><a href=""><span><img src="../resource/images/icon_dingdan.png" alt="" />订单中心</span></a>
+			</div>
+			<div class="pay-way">
+				<div class="pay-way-title">
+					<span>订单金额</span><span>0</span>
+				</div>
+				<ul>
+					<li><label for="input1"><span><img src="../resource/images/icon_wepay.png" alt="" />微信支付</span><input type="radio" name="payWay"  id="input1" value=2 data-payname="微信支付" checked="checked"/></label></li>
+					<li><label for="input2"><span><img src="../resource/images/icon_alipay.png" alt="" />支付宝支付</span><input type="radio" name="payWay"  id="input2" value=1 data-payname="支付宝支付"/></label></li>
+				</ul>
+			</div>
+		</div>
+		<div class="btn"><button id="pay">确认支付</button></div>
+		
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars-v4.0.5.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script src="../resource/js/base64.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			orderId = getUrlParam("orderid");
+			/*var ordersum = getUrlParam("ordersum");*/
+			shopId = getUrlParam("shopId");
+			getOrderDetail();
+			function getOrderDetail(){
+					jsonp("/user/core/orderDetail?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						$(".pay-way-title span:last-child").html("¥"+data.data.orderAmount);
+						console.log(data);
+					},function(err){});}
+			$(".back").click(function(){
+				window.location.href = "orderdetail.html?orderId="+orderId+"&shopId="+shopId;
+			})
+			$(".pay-title a").attr("href","orderlist.html?orderid="+orderId+"&shopId="+shopId);
+			
+			$('#pay').click(function(){
+				var payType = $("input[type=radio]:checked").val();
+				var payName = $("input[type=radio]:checked").data("payname");
+				/*orderpay = {orderId:orderId,payType:payType,payName:payName};*/
+				/*orderpay = {"orderId":"64092339117718","payType":"2","payName":"微信支付"}*/
+				/*var b = new Base64();  
+        		var str = b.encode(JSON.stringify(orderpay));*/ 
+        		if(payType == 2){
+					jsonp("/user/core/wxPaySign?requestType=1&version=1.0","post",{orderId:orderId,shopId:shopId},function(data,status){
+						console.log(data);
+						prepay={};
+						prepay.appId = data.data.appId;
+						prepay.nonceStr = data.data.nonceStr;
+						prepay.package = data.data.package_;
+						prepay.paySign = data.data.paySign;
+						prepay.signType = data.data.signType;
+						prepay.timeStamp = data.data.timeStamp;
+						/*alert(prepay)*/
+						if (typeof WeixinJSBridge == "undefined"){
+							if( document.addEventListener ){
+								document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+							}else if (document.attachEvent){
+								document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+								document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+							}
+						}else{	
+							onBridgeReady(prepay);
+						}	
+					},function(err){alert("出错了")})
+				}
+				else{
+					/*支付宝支付*/
+					window.location.href = "alipay.html?orderId="+orderId+"&shopId="+shopId;
+					
+				}
+			});	});
+			
+			function onBridgeReady(p){
+					WeixinJSBridge.invoke('getBrandWCPayRequest',p,function(res){
+						if(res.err_msg.indexOf('ok') >=0  ) {
+							window.location.href = "paysuccess.html?orderId="+orderId+"&shopId="+shopId;
+						}
+						// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+						else{	
+							window.location.href = "payerr.html?orderId="+orderId+"&shopId="+shopId;
+						}
+					});
+			}
+
+		</script>
+	</body>
+</html>

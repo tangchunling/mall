@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>设置</title>
+		
+		<style>
+			body,input,select,button{font-family: "Microsoft YaHei","微软雅黑",arial,simsun,"宋体";}
+			*{margin:0;padding:0;text-decoration: none;list-style: none;-webkit-text-size-adjust:none;border:0;outline:0;-webkit-touch-callout: none;-webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;}
+			a{color:inherit;}
+			input{border:1px solid #ddd;padding:0 12px;height:40px;line-height:40px;font-size: 14px;outline: none;-webkit-tap-highlight-color: transparent;display: block;width:100%;box-sizing: border-box;}
+			.setform{padding:10px;}
+			.setinput{margin:10px 0;}
+			.setcode{overflow: hidden;}
+			.setcode input{width:60%;float: left;}
+			.setcode span{width:40%;float: left;display: block;height:40px;line-height: 40px;text-align: center;color:#fff;background: #ef503a;}
+			button{width:100%;text-align: center;height:40px;line-height: 40px;border:1px solid #ef503a;background: #ef503a;color:#fff;font-size: 14px;border-radius: 4px;margin-top:20px;}
+		</style>
+	</head>
+	<body>
+		<div class="continer">
+			<div class="setform">
+				<div class="setinput">
+					<input type="text" placeholder="请输入真实姓名"/>
+				</div>
+				<div class="setinput">
+					<input type="tel" placeholder="请输入手机号码"/>
+				</div>
+				<div class="setinput setcode">
+					<input type="text" placeholder="请输入验证码"/><span>获取验证码</span>
+				</div>
+				
+				<button>确定</button>
+			</div>
+			
+		</div>
+	</body>
+</html>

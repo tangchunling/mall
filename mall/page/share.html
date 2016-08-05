@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>分享能赚钱</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<style>
+			.shareimg img{width: 100%;}
+			.sharelogo{text-align: center;margin:40px 0;}
+			.sharelogo img{width:100px;display: block;}
+			.sharelogo a{display: block;width:100px;border:1px solid #B5B5B5;margin:6px auto}
+			.sharecode{text-align: center;font-size: 14px;}
+			.sharecode .code table{margin: auto;margin-bottom: 6px;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			
+			<div class="sharecode">
+				<div class="code">
+					
+				</div>
+				<p>扫描二维码，进入店铺</p>
+			</div>
+		</div>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/jquery.qrcode.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				var shopId = getUrlParam("shopId");
+				
+				getshop();
+				
+				function getshop(){
+					jsonp("/weixin/index?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+						console.log(data);
+						shopdata = data;
+						var html = '<div class="shareimg"><img src="'+imgUrl+data.data.sign+'" alt="" /></div><div class="sharelogo"><a><img src="'+imgUrl+data.data.logo+'" alt="" /></a><p>'+data.data.shopName+'</p></div>';
+						$(".sharecode").before(html);
+					},function(err){
+						
+					})
+				}
+				$('.code').qrcode({
+				  text:baseurl+"/weixin/share?s="+shopId+"&j=1",//二维码包含的内容，默认只支持英文内容,中文会乱码，通过utf16to8转码可支持中文
+				  render: "canvas",
+				  width: 200,
+				  height: 200,
+				  typeNumber: -1,
+				  background: "#ffffff",
+				  foreground: "#000000"
+				 });
+				 
+				 share();
+				    /*微信分享*/
+		   function share(){
+			   var url = window.location.href;
+			    
+			    $.ajax({
+			        type:'get',
+			        url:baseurl+'/weixin/sign?requestType=1&version=1.0',
+			        data:{url:url},
+			        dataType:'JSON',
+			        error:function(err){},
+			        success:function(data,status){
+			            wx.config({
+			                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			                appId: data.appId, // 必填，公众号的唯一标识
+			                timestamp: data.sign.timestamp, // 必填，生成签名的时间戳
+			                nonceStr: data.sign.nonceStr, // 必填，生成签名的随机串
+			                signature: data.sign.signature,// 必填，签名，见附录1
+			                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			            });
+			        },
+			        error: function(data) {
+			          alert("出错了");
+			        }
+			
+			    });
+			    
+			    wx.ready(function() {
+				    var shareUrl = baseurl+"/pages/mall/index.html?shopId="+shopId;//分享产品
+				    var title = shopdata.data.shopName;
+				    var shareImgUrl = imgUrl+shopdata.data.logo;
+				    wx.onMenuShareTimeline({
+				        title: title,
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				    wx.onMenuShareAppMessage({
+				        title: title,
+				        /*desc: '我是黛尽青丝,我推荐伊利优酸乳草莓250ml*24【保质期至8月】(箱)',*/
+				        // 分享描述
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				
+				        type: '',
+				        // 分享类型,music、video或link，不填默认为link
+				        dataUrl: '',
+				        // 如果type是music或video，则要提供数据链接，默认为空
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				            
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				
+				});
+				}
+			})
+		</script>
+	</body>
+</html>

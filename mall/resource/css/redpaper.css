@@ -1,0 +1,15 @@
+.rednav{position: fixed;z-index: 22;width:100%;background: #fff;border-bottom: 1px solid #b5b5b5;}
+.rednav ul li{width:33.33%;text-align: center;float: left;}
+.rednav ul li a{display: inline-block;padding:10px}
+.rednav ul li a.redactive{border-bottom: 1px solid #ef503a;}
+.redcontainer{padding:10px;padding-top: 62px;font-size: 14px;color:#fff;}
+.redcontainer ul li .redtop{background: url(../images/userpacket_red1.png) no-repeat;background-size:100% 100%;padding:10px;margin-top:10px}
+.redcontainer ul li .redtop span{float: right;}
+.redcontainer ul li .redbottom{overflow:hidden;background: url(../images/userpacket_red2.png) no-repeat;background-size: 100% 100%;padding:2%;}
+.redcontainer ul li .redbottom .redlogo{width:50px;float: left;}
+.redcontainer ul li .redbottom .redlogo img{width:50px;}
+.redcontainer ul li .redbottom .redmiddle{width:100%;margin-left:-50px;margin-right: -100px;float: left;}
+.redcontainer ul li .redbottom .redmiddle .redmiddlecontent{margin-left:50px;margin-right: 100px;padding: 0 8px;}
+.redcontainer ul li .redbottom .redmiddle .redmiddlecontent p{margin-bottom: 10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.redcontainer ul li .redbottom .redright{width: 100px;text-align: right;float: right;}
+.redright p span{font-size: 36px;}

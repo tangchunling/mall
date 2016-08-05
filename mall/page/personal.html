@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我的</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<style>
+			html{height: 100%;background: #eee;}
+			.mui-content{padding-bottom: 0;}
+			.pertitle{text-align: center;padding:40px 0;position: relative;border-bottom: 1px solid #eee;}
+			.pertitle .persetting{position: absolute;right:10px;top:20px;width:20px}
+			.pertitle .headimg{margin-bottom: 10px;width:84px;height: 84px;overflow:hidden;border:1px solid #ccc;display: inline-block;border-radius: 100%;}
+			.pertitle .headimg img{width:84px;height: 84px;border-radius: 100%;}
+			.perlist ul li{font-size: 15px;width:33.33%;float: left;text-align: center;border-left: 1px solid #eee;box-sizing: border-box;}
+			.perlist ul li:first-child{border-left: 0;}
+			.perlist ul{overflow: hidden;border-bottom: 1px solid #eee;}
+			.perlist ul li a{display: block;padding:20px 0;}
+			.perlist ul li a .img{height: 60px;line-height: 60px;}
+			.perlist ul li a .img img{width:23%;vertical-align: middle;}
+			.personalmask{position: fixed;top:0;bottom: 0;width: 100%;z-index: 99;background: rgba(0,0,0,0.6);display: none;}
+			.personalmaskC{width: 100%;background: #fff;padding:10px;box-sizing: border-box;}
+			.personalmaskC h1{font-size: 18px;color:#222;font-weight: 400;text-align: center;margin:10px 0;}
+			.personalmaskC .item label{display: block;width:60px;text-align: right;margin-right: 10px;float: left;}
+			.personalmaskC .item>div{width:100%;margin-right: -70px;float: left;}
+			.personalmaskC .item>div>p{margin-right:70px;}
+			.personalmaskC .item{overflow: hidden;margin:15px 0;}
+			.personalmaskC .item input{padding:6px 12px;outline: 0;border-radius: 4px;border:1px solid #c4c4c4;width:100%;box-sizing: border-box;}
+			.personalmaskC .item.yanzhen input{width:64%;border-right: none;border-bottom-right-radius: 0;border-top-right-radius: 0;}
+			.personalmaskC .item button{position: relative;width: 36%;padding: 6px;background: #fff;border: 1px solid #c4c4c4;border-bottom-right-radius: 4px;border-top-right-radius: 4px;}
+			/*.yanzhenbtn{width: 100%;padding:8px 12px;border:none;background: #ee503a;color: #fff;border-radius: 4px;margin:20px 0;}*/
+			
+			input{border:1px solid #ddd;padding:0 12px;height:40px;line-height:40px;font-size: 14px;outline: none;-webkit-tap-highlight-color: transparent;display: block;width:100%;box-sizing: border-box;}
+			.setform{padding:10px;}
+			.setinput{margin:10px 0;}
+			.setcode{overflow: hidden;}
+			.setcode input{width:60%;float: left;}
+			.setcode span{width:40%;float: left;display: block;height:40px;line-height: 40px;text-align: center;color:#fff;background: #ef503a;}
+			button{width:100%;text-align: center;height:40px;line-height: 40px;border:1px solid #ef503a;background: #ef503a;color:#fff;font-size: 14px;border-radius: 4px;margin-top:20px;}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="pertitle">
+				<div class="headimg">
+					<img src="" alt="" />
+				</div>
+				<p id="username"></p>
+				<a id="setting"><img src="../resource/images/icon_setting.png" alt="" class="persetting"/></a>	
+			</div>
+			<div class="perlist">
+				
+			</div>
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item " href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_faxian.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item index-active" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode_sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+		<div class="personalmask">
+			<div class="personalmaskC">
+				<h1>请完善信息</h1>
+				<!--<div class="form">
+					<div class="item">
+						<label for="">姓名</label><div><p><input type="text" id="name"/></p></div>
+					</div>
+					<div class="item">
+						<label for="">手机号</label><div><p><input type="tel" id="tel"/></p></div>
+					</div>
+					<div class="item yanzhen">
+						<label for="" style="height: 1px;"></label><div><p><input type="text" id="code"/><button id="codebtn">获取验证码</button></p></div>
+					</div>
+					<button class="yanzhenbtn">确定</button>
+				</div>-->
+				<div class="setform">
+					<div class="setinput">
+						<input type="text" placeholder="请输入真实姓名" id="name"/>
+					</div>
+					<div class="setinput">
+						<input type="tel" placeholder="请输入手机号码" id="tel"/>
+					</div>
+					<div class="setinput setcode">
+						<input type="text" placeholder="请输入验证码" id="code"/><span id="codebtn">获取验证码</span>
+					</div>
+					
+					<button class="yanzhenbtn">确定</button>
+				</div>
+			</div>
+		</div>
+			<script id="personal" type="text/x-handlebars-template">
+				<ul>
+					<li>
+						<a href="orderlist.html?shopId={{shopId}}">
+							<div class="img">
+								<img src="../resource/images/dingdan.png" alt="" />
+							</div>	
+							<p>我的订单</p>
+						</a>
+					</li>
+					<li>
+						<a href="redpaper.html?shopId={{shopId}}">
+							<div class="img">
+								<img src="../resource/images/hongbao.png" alt="" />
+							</div>
+							
+							<p>我的红包</p>
+						</a>
+					</li>
+					<li>
+						<a href="collection.html?shopId={{shopId}}">
+							<div class="img">
+								<img src="../resource/images/shoucang.png" alt="" />
+							</div>
+							
+							<p>我的收藏</p>
+						</a>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<a href="bill.html?shopId={{shopId}}">
+							<div class="img">
+								<img src="../resource/images/zhangdan.png" alt="" />
+							</div>
+							
+							<p>我的账单</p>
+						</a>
+					</li>
+					<li>
+						<a href="myadrlist.html?shopId={{shopId}}">
+							<div class="img">
+								<img src="../resource/images/dizhi.png" alt="" />
+							</div>
+							
+							<p>收货地址</p>
+						</a>
+					</li>
+					<li>
+						<a href="share.html?shopId={{shopId}}" id="share">
+							<div class="img">
+								<img src="../resource/images/fenxiang.png" alt="" />
+							</div>
+							
+							<p>分享</p>
+						</a>
+					</li>
+				</ul>
+			</script>
+			<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+			<script type="text/javascript" src="../resource/js/server.js"></script>
+			<script type="text/javascript" src="../resource/js/common.js"></script>
+			<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+			<script type="text/javascript">
+				$(function(){
+					shopId = getUrlParam("shopId");
+		           $("#cartid").attr("href","cart.html?shopId="+shopId);
+		           $("#index").attr("href","index.html?shopId="+shopId);
+		           $("#findid").attr("href","find.html?shopId="+shopId);
+		           $("#personalid").attr("href","personal.html?shopId="+shopId);
+		           $("#setting,.personalmask a").attr("href","set.html?shopId="+shopId);
+		           getinfo();
+		           function getinfo(){
+		           		var personalsource = $("#personal").html();
+		           		var personaltemplate = Handlebars.compile(personalsource);
+		           		var personalhtml = personaltemplate({shopId:shopId});
+		           		$(".perlist").html(personalhtml);
+			           	jsonp("/user/core/my_info?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+			           		console.log(data);
+			           		if(data.flag == -1){
+			           			isLogin(shopId,null,3,null);
+			           		}
+			           		else{
+			           			if(!data.mobile){
+			           				$(".personalmask").show();
+			           			}
+			           			$("#username").html(data.username)
+			           			$(".headimg img").attr("src",data.logo);
+			           		}
+			           		
+			           	},function(err){
+			           		alert("出错了")
+			           	})
+		           }
+		           $("#codebtn").click(function(){
+		           		var tel = $("#tel").val();
+		           		if(tel && checkSubmitMobil(tel)){
+		           			jsonp("/person/sendMobile?requestType=1&version=1.0","post",{mobile:tel},function(data,status){
+		           				console.log(data);
+		           				if(data.flag == 1){
+		           					alert(data.message);
+		           					time(document.getElementById("codebtn"));
+		           				}
+		           			},function(err){
+		           				alert("出错了")
+		           			})
+		           		}
+		           		else{
+		           			alert("请填写手机号")
+		           		}
+		           });
+		           $(".yanzhenbtn").click(function(){
+		           	var tel = $("#tel").val();
+		           	var name = $("#name").val();
+		           	var code = $("#code").val();
+		           	if(code.length == 0){
+		           		alert("请输入验证码");
+		           	}
+		           	else if(tel.length == 0 && name.length == 0){
+		           		alert("请输入完整信息")
+		           	}
+		           	else{
+		           		jsonp("/user/core/editProfile?requestType=1&version=1.0","post",{trueName:name,shopId:shopId,mobile:tel,verifyCode:code},function(data,status){
+							if(data.flag == 1){
+								$(".personalmask").hide();
+							}
+							else if(data.flag == 0){
+								alert(data.message);
+							}
+						},function(err){
+							alert("出错了")
+						})
+		           	}
+		           })
+		           function checkSubmitMobil(mobile) { 		
+						if (!mobile.match(/^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/)) { 
+						alert("手机号码格式不正确！"); 
+						return false; 
+						} 
+						return true; 
+					}
+		           var wait=60;  
+					function time(o) {  
+					        if (wait == 0) {  
+					            o.removeAttribute("disabled");            
+					            o.innerHTML="获取验证码";  
+					            wait = 60;  
+					        } else {  
+					            o.setAttribute("disabled", true);  
+					            o.innerHTML="倒计时(" + wait + ")";  
+					            wait--;  
+					            setTimeout(function() {  
+					                time(o)  
+					            },  
+					            1000)  
+					        }  
+					    }  
+				})
+			</script>
+	</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>编辑收货地址</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/address.css" />
+	</head>
+	<body>
+		<div class="mui-content" style="padding-bottom: 0;">
+			<div class="adr-list">
+				<label for="">收货人：</label><input type="text" id="name"/>
+			</div>
+			<div class="adr-list">
+				<label for="">手机号码：</label><input type="tel" id="tel"/>
+			</div>
+			<div class="adr-list">
+				<label for="">省、市、区县：</label>
+				<div class="adritem">
+					<select name="" id="adrprovince">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<div class="adritem">
+					<select name="" id="adrcity">
+						
+					</select>
+				</div>
+				<div class="adritem">
+					<select name="" id="adrcountry">
+					</select>
+				</div>
+			</div>
+			<div class="adr-list">
+				<label for="">详细地址：</label><textarea name="" rows="2" cols="" id="address"></textarea>
+			</div>
+			<div class="setdefault">
+				<input type="checkbox" id="setdefault"/>设为默认地址
+			</div>
+		</div>
+		<div class="adrbtn">
+			<button id="save">保存并使用</button>
+		</div>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript">
+			var shopId = getUrlParam("shopId");
+			var ids = getUrlParam("ids");
+			var itemId = getUrlParam("itemId");
+			var num = getUrlParam("num");
+			var addressjson = {};
+			getprovince();
+			function getprovince(){
+				jsonp("/address/selectProvince?requestType=1&version=1.0","get",{},function(data,status){
+					console.log(data);
+					var provinceHtml = ""
+					for(i=0;i<data.data.length;i++){
+						provinceHtml += "<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+					}
+					$("#adrprovince option").after(provinceHtml);
+				},function(err){
+					alert('出错了')
+				});
+			}
+			$("#adrprovince").change(function(){
+				var provinceId = $(this).select().val();
+				getcity(provinceId);
+				$("#adrcity").show();
+			});
+			function getcity(provinceId){
+				jsonp("/address/selectCity?requestType=1&version=1.0","post",{proId:provinceId},function(data,status){
+					console.log(data);
+					var cityHtml = "<option value=''>请选择</option>";
+					for(i=0;i<data.data.length;i++){
+						cityHtml += "<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+					}
+					$("#adrcity").html(cityHtml);
+				},function(err){
+					alert('出错了')
+				});
+			}
+			$("#adrcity").change(function(){
+				var cityId = $(this).select().val();
+				getcounty(cityId);
+				$("#adrcountry").show();
+			})
+			function getcounty(cityId){
+				jsonp("/address/selectCounty?requestType=1&version=1.0","post",{cityId:cityId},function(data,status){
+					console.log(data);
+					var countyHtml = "<option value=''>请选择</option>";
+					for(i=0;i<data.data.length;i++){
+						countyHtml += "<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+					}
+					$("#adrcountry").html(countyHtml);
+				},function(err){
+					alert('出错了')
+				});
+			}
+			$("#save").click(function(){
+				var consignee = $("#name").val();
+				var province = $("#adrprovince").val();
+				var city = $("#adrcity").val();
+				var district = $("#adrcountry").val();
+				var address = $("#address").val();
+				var tel = $("#tel").val();
+				
+				
+				if(consignee && province && city && district && address && tel){
+					if(checkSubmitMobil(tel)){
+						addressjson.consignee = consignee;
+						addressjson.province = province;
+						addressjson.city = city;
+						addressjson.district = district;
+						addressjson.address = address;
+						addressjson.mobile = tel;
+						addressjson.shopId = shopId;
+						addressjson.isDefault = $("#setdefault").prop("checked");
+						addressjson = JSON.stringify(addressjson);
+						console.log(addressjson)
+						jsonp("/user/core/addAddress?requestType=1&version=1.0","post",{address:addressjson,shopId:shopId},function(data,status){
+							console.log(data);
+							if(num){
+								window.location.href = "order.html?itemId="+itemId+"&shopId="+shopId+"&num="+num+"&id="+data.data;
+							}else{
+								window.location.href = "order.html?ids="+ids+"&shopId="+shopId+"&id="+data.data;
+							}	
+							
+						},function(err){
+							alert("出错了")
+						})
+					}
+				}
+				else{
+					alert("请填写完整信息")
+				}
+				
+			});
+			function checkSubmitMobil(mobile) { 		
+				if (!mobile.match(/^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/)) { 
+				alert("手机号码格式不正确！"); 
+				return false; 
+				} 
+				return true; 
+			} 
+		</script>
+	</body>
+</html>

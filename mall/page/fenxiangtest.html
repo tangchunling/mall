@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<body>
+		<button style="padding:10px;width:100%;text-align: center;">加入购物车</button>
+		
+		<script src="http://res.jiuqu1688.com/js/jquery.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		
+		<script type="text/javascript">
+			
+			    var url = window.location.href;
+			    
+			    $.ajax({
+			        type:'get',
+			        url:'http://test.jiuqu1688.com/weixin/sign?requestType=1&version=1.0',
+			        data:{url:url},
+			        dataType:'JSON',
+			        error:function(err){},
+			        success:function(data,status){
+			            wx.config({
+			                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			                appId: data.appId, // 必填，公众号的唯一标识
+			                timestamp: data.sign.timestamp, // 必填，生成签名的时间戳
+			                nonceStr: data.sign.nonceStr, // 必填，生成签名的随机串
+			                signature: data.sign.signature,// 必填，签名，见附录1
+			                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			            });
+			        },
+			        error: function(data) {
+			          alert("出错了");
+			        }
+			
+			    });
+			    
+			    wx.ready(function() {
+				    var shareUrl = "http://wx.jiuqu1688.com/oAuth?o=12&u=971&s=423&id=3094";//分享产品
+				    
+				    var shareImgUrl = "http://image.jiuqu1688.com/2016/4/ee00be2c-a602-448b-986b-f23bd0885840.jpg";
+				    wx.onMenuShareTimeline({
+				        title: '伊利优酸乳草莓250ml*24【保质期至8月】(箱)',
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				    wx.onMenuShareAppMessage({
+				        title: '伊利优酸乳草莓250ml*24【保质期至8月】(箱)',
+				        desc: '我是黛尽青丝,我推荐伊利优酸乳草莓250ml*24【保质期至8月】(箱)',
+				        // 分享描述
+				        link: shareUrl,
+				        imgUrl: shareImgUrl,
+				
+				        type: '',
+				        // 分享类型,music、video或link，不填默认为link
+				        dataUrl: '',
+				        // 如果type是music或video，则要提供数据链接，默认为空
+				        trigger: function(res) {
+				
+				        },
+				        success: function(res) {
+				            
+				        },
+				        cancel: function(res) {
+				           // window.location.href="http://admin.chinatoplady.cn/wxmmmg/order/toMyOrder?orderType=1";
+				        },
+				        fail: function(res) {
+				            // alert(JSON.stringify(res));
+				        }
+				    });
+				
+				});
+
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>管理收货地址</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/address.css" />
+	</head>
+	<body>
+		<div class="adrcontainer">
+			<div class="adrlist">
+				<ul>
+					
+				</ul>
+			</div>
+			<div class="adrbtn">
+				<button id="add">添加地址</button>
+			</div>
+		</div>
+		<script id="adrlist" type="text/x-handlebars-template">
+			{{#each data}}
+			<li data-id="{{this.id}}">
+				<div class="adrlistleft">
+					<div class="adrlistleftContent">
+						<div><span>{{this.consignee}}</span><span>{{this.mobile}}</span>{{#if this.isDefault}}<span class="default">默认</span>{{/if}}</div>
+						<p>{{this.address}}</p>
+					</div>
+				</div>
+				<div class="adrlistright">
+					<img src="../resource/images/icon_edit.png" alt="" />
+				</div>
+			</li>
+			{{/each}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				shopId = getUrlParam("shopId");
+				ids = getUrlParam("ids");
+				itemId = getUrlParam("itemId");
+				num = getUrlParam("num");
+				getlist();
+				$("#add").click(function(){
+					if(num){
+						window.location.href = "addAdr.html?itemId="+itemId+"&shopId="+shopId+"&num="+num;
+					}else{
+						window.location.href = "addAdr.html?ids="+ids+"&shopId="+shopId;
+					}	
+				})
+			});
+			function getlist(){
+				jsonp("/user/core/addressList?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+					console.log(data);
+					var adrlistSource = $("#adrlist").html();
+					var adrlistTemplate = Handlebars.compile(adrlistSource);
+					var adrlistHtml = adrlistTemplate({data:data.data});
+					$(".adrlist ul").html(adrlistHtml);
+					
+					$(".adrlistright").click(function(){
+						var id = $(this).parent().data("id");
+						if(num){
+							window.location.href = "updateaddress.html?id="+id+"&itemId="+itemId+"&shopId="+shopId+"&num="+num;
+						}
+						else{
+							window.location.href = "updateaddress.html?id="+id+"&ids="+ids+"&shopId="+shopId;
+						}
+						
+					});
+					$(".adrlist ul li .adrlistleft").click(function(){
+						if(num){
+							window.location.href = "order.html?id="+$(this).parent().data("id")+"&itemId="+itemId+"&shopId="+shopId+"&num="+num;
+						}
+						else{
+							window.location.href = "order.html?id="+$(this).parent().data("id")+"&ids="+ids+"&shopId="+shopId;
+						}
+						
+					});
+				},function(err){
+					alert("出错了");
+				})
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>购物车</title>
+		<link rel="stylesheet" href="../resource/css/mui.min.css" />
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/cart.css" />
+	</head>
+	<body>
+		
+		<div class="mui-content">
+			<div class="cart-item">
+				<div class="item-title">
+					<span id="shopname"></span>
+					<div class="item-delete" id="btndeleteall">
+						<img src="../resource/images/icon_recbin.png" alt="" />
+					</div>
+				</div>
+				<div class="cart-list">
+					
+				</div>
+			</div>
+			<div class="settle-container">
+				<div class="settle-content">
+					<div class="settle-content-left">
+						<input type="checkbox" name="" id="all" value="" style="margin-right:4px;"/>全选
+					</div>
+					<div class="settle-content-middle">
+						<div class="settle-sum">
+							<p>总价：<span id="total">0</span></p>
+						</div>
+					</div>
+					<div class="settle-content-right" id="btnbuy">
+						<span>结算(<span id="total-num">0</span>)</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav class="index-bar index-bar-tab">
+			<a class="index-tab-item " href="" id="index">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_shangpin.png" alt="" />
+				</span>
+				<span class="index-tab-label">首页</span>
+			</a>
+			<a class="index-tab-item index-active" href="" id="cartid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_gouwuche_sel.png" alt="" />
+				</span>
+				<span class="index-tab-label">购物车</span>
+			</a>
+			<a class="index-tab-item" href="" id="findid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_faxian.png" alt="" />
+				</span>
+				<span class="index-tab-label">发现</span>
+			</a>
+			<a class="index-tab-item" href="" id="personalid">
+				<span class="index-icon nav-logo">
+					<img src="../resource/images/icon_wode.png" alt="" />
+				</span>
+				<span class="index-tab-label">我</span>
+			</a>
+		</nav>
+		<script id="cartList" type="text/x-handlebars-template">
+			<ul>
+				{{#each cart}}
+				<li data-id="{{this.id}}" data-price="{{this.price}}" data-itemId="{{this.itemId}}">
+					<div class="cart-item-left">{{#if this.status}}<input type="checkbox" value="{{this.id}}"/>{{else}}<span></span></span>{{/if}}<img src="{{../cart.imgUrl}}{{this.picture}}_150x150.jpg" alt="" /></div>
+					<div class="cart-item-right">
+						<div class="cart-right-content">
+							<a href="product.html?itemId={{this.itemId}}"><p class="cart-item-title">{{this.title}}({{this.itemProps}})</p></a>
+							<div class="cart-item-edit">
+								{{#if this.status}}
+								<div class="mui-numbox" data-numbox-min='1'>
+									<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+									<input id="num{{this.id}}" class="mui-input-numbox" type="number" value="{{this.num}}" />
+									<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+								</div>
+								{{else}}<span>失效</span>
+								{{/if}}
+								<div class="cart-item-price">¥{{this.price}}</div>
+							</div>
+						</div>	
+					</div>
+				</li>
+				{{/each}}
+			</ul>
+		</script>
+		<script id="cartNull" type="text/x-handlebars-template">
+			<div class="cartNull">
+				<span>
+					<img src="../resource/images/icon_gouwuche_nogoods.png">
+				</span>
+				<p>购物车还没有商品哦</p>
+			</div>
+			<div class="cartCommend">
+				<div class="cartCommendTitle"><span><img src="../resource/images/icon_tuijian.png" alt="" />推荐商品</span></div>
+				<div class="pro-list">
+						<ul>
+							{{#each commend}}
+							<li>
+								<a href="product.html?itemId={{this.itemId}}&&shopId={{../data.shopId}}">
+									<div class="img">
+										{{#if this.isPromote}}
+											<img src="../resource/images/sales@2x.png" alt="" class="dijia"/>
+										{{/if}}
+										{{#if this.isNew}}
+											<img src="../resource/images/newarrival@2x.png" alt="" class="new"/>
+										{{/if}}
+										<img src="{{../commend.imgUrl}}{{this.picture}}_400x400.jpg" alt="" />
+										<span>销量&nbsp;{{this.sold}}</span>
+									</div>
+									<p>{{this.title}}</p>
+									<div class="price">
+										<span class="salePrice">¥{{this.price}}</span>
+										<span class="originalPrice">¥{{this.formerPrice}}</span>
+										<label style="font-size: 12px;color:#666;">{{#if this.sku}}
+								({{this.sku}})
+							{{/if}}</label>
+									</div>
+								</a>
+							</li>
+							{{/each}}
+						</ul>
+					</div>
+			</div>
+		</script>
+		<script type="text/javascript" src="../resource/js/mui.min.js"></script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript" src="../resource/js/cart.js"></script>
+		<script type="text/javascript">
+			
+    	</script>
+	</body>
+</html>

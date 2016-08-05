@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<body>
+		<button style="padding:10px;width:100%;text-align: center;">加入购物车</button>
+		
+		<script src="http://res.jiuqu1688.com/js/jquery.js"></script>
+		<script type="text/javascript">
+			$("button").click(function(){
+				$.ajax({
+					type:"get",
+					url:"http://test.jiuqu1688.com/user/core/test?requestType=1&version=1.0",
+					success:function(data,status){
+						/*alert(1)*/
+						isLogin(data.flag,"1");
+					},
+					error:function(err){
+						alert("出错了")
+					}
+				});
+				
+				function isLogin(flag,shopId){
+					if(flag == -1){
+						window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx683519d9156322f9&redirect_uri=http://test.jiuqu1688.com/oAuth?requestType=1&version=1.0&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"
+					}
+					else
+					 alert("出错了");
+				}
+
+			})
+		</script>
+	</body>
+</html>

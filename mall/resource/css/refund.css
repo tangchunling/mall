@@ -1,0 +1,30 @@
+.retitle{background: #657585;padding: 10px;color:#fff;}
+.retitle ul li{padding:4px 0;font-size: 14px;}
+.repro{border-bottom: 10px solid #eee;border-top: 10px solid #eee;}
+.repro h1{font-size: 16px;font-weight: 400;border-bottom: 1px solid #C8C7CC;padding:10px;}
+.reprocontainer{padding: 10px;overflow: hidden;}
+.reprocontainer .reproleft{width:90px;float: left;}
+.reprocontainer .reproleft img{width: 80px;}
+.reprocontainer .reproright{width: 100%;float: right;margin-left: -90px;}
+.reprocontainer .reprorightc{margin-left: 90px;}
+.reprocontainer .reprorightc>div{color:#666;margin-top: 6px;font-size: 14px;}
+.reprocontainer .reprorightc p{line-height: 20px;height: 40px;overflow: hidden;}
+.reprocontainer .reprorightc>div span{margin-right: 10px;}
+.remessage{padding:10px;}
+select,input,textarea,input[type=number]{background: #eee;border:0;}
+select{background: url("../images/icon_down.png") no-repeat 320px center #eee;background-size: 5%;}
+.remessage ul li label b{color: #CF2D28;margin-left: 4px;}
+.remessage ul li label{font-size: 14px;margin-right: 10px;}
+.remessage ul li{margin:6px 0;}
+.rebtn{position: fixed;width: 100%;padding:20px;background: #fff;z-index: 22;bottom: 0;}
+.rebtn button{width:100%;color:#fff;background: #ee503a;border-color: #ee503a;}
+.redtitle{padding: 10px;padding-left:20px;}
+.redtitle h1{font-size: 16px;margin-bottom: 6px;}
+.redtitle p{font-size: 14px;}
+.redbtn a{display:inline-block;text-align:center;background: #fff;border: 1px solid #ef503a;border-radius: 4px;color: #ef503a;padding:6px 0;width:46%;margin-top: 20px;margin-bottom: 10px;}
+.redbtn a:first-child{margin-right: 6%;}
+.redlist{padding:10px;font-size: 14px;}
+.redlist ul li{padding:4px 0;}
+.redlist ul li label{color: #999;}
+.redrecord h1{font-weight: 400;text-align: center;padding-top:10px;font-size: 16px;}
+.remain{color:#ef503a;margin:0 4px}

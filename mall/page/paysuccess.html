@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>支付成功</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<style type="text/css">
+			.pstitle{padding:100px 0 70px;text-align: center;}
+			.pstitle .pslogo{display: inline-block;width:110px;margin-bottom: 10px;}
+			.pstitle .pslogo img{width: 100%;}
+			.psbtn a{display:inline-block;background: #fff;border:1px solid #333;border-radius: 5px;width:90px;text-align: center;height: 35px;line-height: 35px;margin-top:20px;}
+			.psbtn a:last-child{margin-left: 20px;}
+			.pscontent{padding-left: 10px;}
+			.pscontent .psadr .psadritem span{margin-right: 20px;}
+			.psitem ul li{padding:4px 0;}
+			.psitem ul li label{color: #666;}
+			hr{margin:4px 0;background: #c8c7cc;border-color: ;}
+		</style>
+	</head>
+	<body>
+		<div class="pstitle">
+			<div class="pslogo">
+				<img src="../resource/images/paysuccess.png" alt="" />
+			</div>
+			<p>订单支付成功</p>
+			<div class="psbtn">
+				<a target="_blank">查看订单</a>
+				<a target="_blank">继续购物</a>
+			</div>
+		</div>
+		<div class="pscontent">
+		</div>
+		
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				var orderId = getUrlParam("orderId");
+				var shopId = getUrlParam("shopId");
+				$(".psbtn a:first-child").attr("href","orderdetail.html?orderId="+orderId+"&shopId="+shopId);
+				$(".psbtn a:last-child").attr("href","index.html?shopId="+shopId);
+			})
+		</script>
+	</body>
+</html>

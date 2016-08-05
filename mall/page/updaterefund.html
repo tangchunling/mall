@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>申请退款</title>
+		<link rel="stylesheet" href="../resource/css/mui.min.css" />
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/refund.css" />
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="retitle">
+				<ul>
+					<li><label for="">订单编号：</label><span id="reorderid"></span></li>
+					<li><label for="">商户名称：</label><span id="reshopname"></span></li>
+				</ul>
+			</div>
+			<div class="repro">
+				<h1>申请售后商品</h1>
+				<div class="reprocontainer">
+					
+				</div>
+			</div>
+			<div class="remessage">
+				<ul>
+					<!--<li style="margin-bottom: 16px;">
+						<label for="">退货数量<b>*</b></label>
+						<div class="mui-numbox" data-numbox-min='1'>
+							<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+							<input id="renum" class="mui-input-numbox" type="number" value="" />
+							<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+						</div>
+					</li>-->
+					<li>
+						<label for="">处理方式<b>*</b></label>
+						<select name="" id="retype">
+							<option value="1">仅退款</option>
+							<option value="2">退款退货</option>
+						</select>
+					</li>
+					<li>
+						<label for="">退款原因<b>*</b></label>
+						<select name="" id="rereason">
+							<option value="1">买/卖双方协商一致</option>
+							<option value="2">买错/多买</option>
+							<option value="3">商品质量问题</option>
+							<option value="4">商品与描述不符</option>
+							<option value="5">商品错发/漏发</option>
+							<option value="6">未收到货</option>
+							<option value="7">其他原因</option>
+						</select>
+					</li>
+					<li>
+						<label for="">退款金额<b>*</b></label>
+						<input type="number" name="" id="resum" value="" />
+					</li>
+					<li>
+						<label for="">问题描述<b>*</b></label>
+						<textarea name="" rows="" cols="2" id="redes"></textarea>
+					</li>
+					<!--<li>
+						<label for="">上传图片<b>*</b><span>请提供相关凭证图片，最多5张</span></label>
+						
+					</li>-->
+				</ul>
+			</div>
+			<div class="rebtn">
+				<button>确认修改</button>
+			</div>	
+		</div>
+		<script type="text/x-handlebars-template" id="reproduct">
+			<div class="reproleft">
+				<img src="{{data.imgUrl}}{{data.picture}}_80x80.jpg" alt="" />
+			</div>
+			<div class="reproright">
+				<div class="reprorightc">
+					<p>{{data.productName}}</p>
+					<div><span>购买数量：{{data.itemNum}}</span><span>实付金额：{{data.sum}}元</span></div>
+				</div>
+			</div>
+		</script>
+		<!--<script type="text/javascript" src="../resource/js/mui.min.js"></script>-->
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script src="../resource/js/base64.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				orderId = getUrlParam("orderId");
+				shopId = getUrlParam("shopId");
+				id = getUrlParam("id");
+				refundId = getUrlParam("refundId");
+				var refunds = {};
+				getrefund();
+				function getrefund(){
+					jsonp("/user/core/refundDetail?requestType=1&version=1.0","post",{id:id,shopId:shopId},function(data,status){
+						console.log(data);
+						$("#reorderid").html(data.data.orderId);
+						$("#reshopname").html(data.data.shopName);
+						$("#retype option[value='"+data.data.refundType+"']").attr("selected", "selected");
+						$("#rereason option[value='"+data.data.refundReason+"']").attr("selected", "selected");
+						$("#resum").val(data.data.refundAmount);
+						$("#redes").val(data.data.refundNote);
+						data.data.sum = data.data.itemAmount*data.data.itemNum;		
+						refunds.orderItemId = data.data.orderItemId;
+						refunds.shopId = shopId;
+						refunds.shopName = data.data.shopName;
+						refunds.orderId = data.data.orderId;
+						refunds.itemId = data.data.itemId;
+						refunds.id = data.data.id;
+						refunds.refundId = data.data.refundId;
+						
+						data.data.imgUrl = imgUrl;
+						var resource = $("#reproduct").html();
+						var retemplate = Handlebars.compile(resource);
+						var rehtml = retemplate({data:data.data});
+						$(".reprocontainer").html(rehtml)
+					},function(err){
+						
+					})
+				}
+				$(".rebtn button").click(function(){
+					refunds.refundType = $("#retype").val();
+					refunds.refundReason = $("#rereason").val();
+					refunds.refundNote = $("#redes").val();
+					refunds.refundAmount = $("#resum").val();
+					refunds.status = 4;
+					if(!refunds.refundType || !refunds.refundReason || !refunds.refundNote || !refunds.refundAmount){
+						alert("请填写完整信息");
+						console.log(refunds);
+					}
+					else if(refunds.refundAmount > reproduct.sum){
+						alert("退款金额不能大于实际总金额");
+					}
+					else{
+						var b = new Base64();  
+	        			var str = b.encode(JSON.stringify(refunds));
+	        			console.log(refunds);
+	        			apply(str);
+					}
+				})
+			})
+			
+			function apply(refunds){
+				jsonp("/user/core/updateRefund?requestType=1&version=1.0","post",{refunds:refunds,shopId:shopId},function(data,status){
+					if(data.flag == 1){
+						alert("申请成功");
+						window.location.href = 'refunddetail.html?id='+id+"&shopId="+shopId;
+					}
+					else{
+						alert(data.message)
+					}	
+				},function(err){
+					alert("出错了")
+				})
+			}
+		</script>
+	</body>
+</html>

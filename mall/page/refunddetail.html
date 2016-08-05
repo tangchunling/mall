@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>申请退款</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/refund.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="redtitle">
+				<h1><img src="" alt="" />您已成功提交申请，请等待商家处理。</h1>
+				<p>·如果<label for="" class="remain"></label>内商家未作处理，退款将自动打成，届时请你留意退款款项入账</p>
+				<div class="redbtn">
+					<a href="">修改退款申请</a><a>撤销退款申请</a>
+				</div>
+			</div>
+			<div class="redcontent">
+				
+			</div>
+		</div>
+		<script type="text/x-handlebars-template" id="refunddetail">
+			<div class="repro">
+				<h1>申请售后商品</h1>
+				<div class="reprocontainer">
+					<div class="reproleft">
+						<img src="{{data.imgUrl}}{{data.picture}}_80x80.jpg" alt="" />
+					</div>
+					<div class="reproright">
+						<div class="reprorightc">
+							<p>{{data.productName}}</p>
+							<div><span>购买数量：{{data.itemNum}}</span><span>实付金额：{{data.itemAmount}}元</span></div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="redlist">
+					<ul>
+						<!--<li>
+							<label for="">退货数量：</label><span>1</span>
+						</li>-->
+						<li>
+							<label for="">处理方式：</label><span>{{#type data.refundType}}{{/type}}</span>
+						</li>
+						<li>
+							<label for="">退款原因：</label><span>{{#reason data.refundReason}}{{/reason}}</span>
+						</li>
+						<li>
+							<label for="">退款金额：</label><span>{{data.refundAmount}}</span>
+						</li>
+						<li>
+							<label for="">问题描述：</label><span>{{data.refundNote}}</span>
+						</li>
+						<li>
+							<label for="">申请时间：</label><span>{{data.created}}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="redrecord">
+				<h1>协商记录详情</h1>
+				{{#each data.list}}
+				<div class="redlist">
+					<ul>
+						<li>{{#record this.created this.role}}{{/record}}</li>
+						<!--<li>
+							<label for="">退货数量：</label><span>1</span>
+						</li>-->
+						<li>
+							<label for="">处理方式：</label><span>{{#type this.refundType}}{{/type}}</span>
+						</li>
+						<li>
+							<label for="">退款原因：</label><span>{{#reason this.refundReason}}{{/reason}}</span>
+						</li>
+						<li>
+							<label for="">退款金额：</label><span>{{this.refundAmount}}</span>
+						</li>
+						<li>
+							<label for="">问题描述：</label><span>{{this.refundNote}}</span>
+						</li>
+						<li>
+							<label for="">申请时间：</label><span>{{#time this.created}}{{/time}}</span>
+						</li>
+						<li>
+							<label for="">退款状态：</label><span>{{#tuikuan this.status}}{{/tuikuan}}</span>
+						</li>
+					</ul>
+				</div>
+				{{/each}}
+			</div>
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script src="../resource/js/base64.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				id = getUrlParam("id");
+				shopId = getUrlParam("shopId");
+				getrefund();
+				function getrefund(){
+					jsonp("/user/core/refundDetail?requestType=1&version=1.0","post",{id:id,shopId:shopId},function(data,status){
+						console.log(data);
+						Handlebars.registerHelper("reason",function(item,options){
+						  		var out = "";
+						  		
+						  		if(item == 1){
+						  			out = "买/卖双方协商一致";
+						  		}
+						  		else if(item == 2){
+						  			out = "买错/多买";
+						  		}
+						  		else if(item == 3){
+						  			out = "商品质量问题";
+						  		}
+						  		else if(item == 4){
+						  			out = "商品与描述不符";
+						  		}
+						  		else if(item == 5){
+						  			out = "商品错发/漏发";
+						  		}
+						  		else if(item == 6){
+						  			out = "未收到货";
+						  		}
+						  		else if(item == 7){
+						  			out = "其他原因";
+						  		}
+						  		
+					           return out;
+					         });
+				         Handlebars.registerHelper("type",function(item,options){
+					  		var out = "";
+					  		
+					  		if(item == 1){
+					  			out = "仅退款";
+					  		}
+					  		else if(item == 2){
+					  			out = "退款退货";
+					  		}
+				           return out;
+				         });
+				         Handlebars.registerHelper("record",function(time,role,options){
+						  		var out = "";
+						  		time = init(time);
+						  		if(role == 0){
+						  			out = "我在"+time+"创建了退款申请";
+						  		}
+						  		else if(role == 1){
+						  			out = "商家在"+time+"处理了退款申请";
+						  		}
+					           return out;
+					         });
+					         Handlebars.registerHelper("time",function(time,options){
+						  		var out = "";
+						  		out = init(time);
+					           return out;
+					         });
+					          Handlebars.registerHelper("tuikuan",function(status,options){
+						  		var out = "";
+						  		
+					  			if(status == -2){
+					  				out = "申请退款";
+					  			}
+					  			else if(status == -1){
+					  				out=""
+					  			}
+					  			else if(status == 1){
+					  				out= "不同意退款";
+					  			}
+					  			else if(status == 2){
+					  				out= "卖家已同意退款";
+					  			}
+					  			else if(status == 3){
+					  				out= "退款已完成";
+					  			}
+					  			else if(status == 0 || status == 4){
+					  				out = "退款中";
+					  			}
+					           return out;
+					         });
+						if(data.flag == 1){
+							$(".redbtn a:first-child").attr("href","updaterefund.html?refundId="+data.data.id+"&id="+id+"&shopId="+shopId+"&orderItemId="+data.data.orderItemId);
+							$(".remain").html(data.data.remainTime);
+							data.data.imgUrl = imgUrl;
+							data.data.created = init(data.data.created);
+							var redsource = $("#refunddetail").html();
+							var redtemplate = Handlebars.compile(redsource);
+							var redhtml = redtemplate({data:data.data});
+							$(".redcontent").html(redhtml);
+							$(".redbtn a:last-child").click(function(){
+								updaterefund(data.data.id,data.data.orderItemId);
+							})
+						}
+						else if(data.flag == 0){
+							alert(data.message);
+						}
+						else if(data.flag == -1){
+							alert(data.message);
+						}
+						
+					},function(err){
+						alert("出错了");
+					});
+				}
+				function init(t){
+					var d=new Date(t);
+					var year=d.getFullYear();
+					var day=d.getDate();
+					var month=+d.getMonth()+1;
+					var hour=d.getHours();
+					var minute=d.getMinutes();
+					var second=d.getSeconds();
+					var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);	
+					return f;
+				}
+				function formate(d){
+					return d>9?d:'0'+d;
+				}
+				function updaterefund(id,orderItemId){
+					if(confirm("撤销申请退款后，无法再进行申请退款，是否撤销")){
+						var refunds = {};
+						refunds.id = id;
+						refunds.status = -1;
+						refunds.orderItemId = orderItemId;
+						var b = new Base64();  
+	        			var str = b.encode(JSON.stringify(refunds));
+						jsonp("/user/core/updateRefund?requestType=1&version=1.0","post",{refunds:str},function(data,status){
+							alert("撤销成功");
+							window.location.href = "orderlist.html?shopId="+shopId;
+						},function(err){
+							alert("出错了")
+						})
+					}
+					else{
+						
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

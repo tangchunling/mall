@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我的收藏</title>
+		<link rel="stylesheet" href="../resource/css/common.css" />
+		<link rel="stylesheet" href="../resource/css/collection.css" />
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="collnav">
+				<div class="collnavleft">
+					<div class="collnavleftcontent">
+						<a class="collactive">收藏的商品(<span id="pronum">0</span>)</a>
+						<a>收藏的店铺(<span id="shopnum">0</span>)</a>
+					</div>
+				</div>
+				<div class="collnavright" id="0">
+					<div class="colledit">编辑</div><div class="complete">完成</div>
+				</div>
+			</div>
+			<div class="collcontainer">
+				<div class="pro-container">
+					
+				</div>
+				<div class="shopcontainer">
+					<ul>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="collfoot">
+			<a><input type="checkbox" name="all"/>全选</a>
+			<a id="colldelete">删除</a>
+		</div>
+		<script id="product" type="text/x-handlebars-template">
+			<div class="pro-list">
+				<ul>
+					{{#each data}}
+					<li>
+						<a href="product.html?itemId={{this.itemId}}&&shopId={{this.shopId}}">
+							<div class="img">
+								<img src="{{../data.imgUrl}}{{this.imgUrl}}" alt="" />
+								
+								<div class="imgmask">
+									<input type="checkbox" value="{{this.id}}" />
+								</div>
+							</div>
+							<p>{{this.itemTitle}}</p>
+							<div class="price">
+								<span class="salePrice">¥{{this.shopPrice}}</span>
+								<span class="originalPrice">¥{{this.marketPrice}}</span>
+							</div>
+						</a>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+		</script>
+		<script id="shop" type="text/x-handlebars-template">
+			{{#each data}}
+			<li>			
+				<div class="shop-item">
+					<div class="shop-container">
+						<div class="shop-img">
+							<img src="{{../data.imgUrl}}{{this.imgUrl}}" alt="" id="shopImg"/>
+						</div>
+						<div class="shop-middle">
+							<div class="shop-middle-content">
+								<p id="shopName">{{this.title}}</p>
+								{{#renzhen this.status}}{{/renzhen}}
+							</div>
+						</div>
+						<a href="index.html?shopId={{this.shopId}}" class="enter">进入店铺</a>
+						<input type="checkbox" class="collcheckbox" value="{{this.id}}"/>
+					</div>
+				</div>
+			</li>
+			{{/each}}
+		</script>
+		<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../resource/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="../resource/js/server.js"></script>
+		<script type="text/javascript" src="../resource/js/common.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				shopId = getUrlParam("shopId");
+				showCollectShop();
+				showCollectItem();
+				function showCollectShop(){
+					jsonp("/user/core/showCollectShop?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+						console.log(data);
+						if(data.flag == 1){
+							Handlebars.registerHelper("renzhen",function(item,options){
+						  		var out = "";
+						  		var num = 0;
+						  		if(item == 4 || item == 5 || item == 6){
+						  			out = '<img src="../resource/images/rz.png" alt="" />';
+						  		}
+						  		else{
+						  			out = '<img src="../resource/images/unrz.png" alt="" />';
+						  		}
+					           return out;
+					         });
+							$("#shopnum").html(data.num);
+							data.data.imgUrl = imgUrl;
+							var shopsource = $("#shop").html();
+							var shoptemplate = Handlebars.compile(shopsource);
+							var shophtml = shoptemplate({data:data.data});
+							$(".shopcontainer ul").html(shophtml);
+						}
+						else if(data.flag == 0){
+							$(".shopcontainer ul").html("");
+							$("#shopnum").html("0");
+						}
+					},function(err){
+						
+					})
+				}
+				function showCollectItem(){
+					jsonp("/user/core/showCollectItem?requestType=1&version=1.0","post",{shopId:shopId},function(data,status){
+						console.log(data);
+						if(data.flag == 1){
+							$("#pronum").html(data.num);
+							data.data.imgUrl = imgUrl;
+							var prosource = $("#product").html();
+							var protemplate = Handlebars.compile(prosource);
+							var prohtml = protemplate({data:data.data});
+							$(".pro-container").html(prohtml);
+						}
+						else if(data.flag == 0){
+							$(".pro-container").html("");
+							$("#pronum").html("0");
+						}
+					},function(err){
+						
+					})
+				}
+				$(".collnavleftcontent a").click(function(){
+					var index = $(this).index();	
+					if(index == 0){	
+						if(!$(".colledit").is(":hidden")){
+							$(".collnavright").attr("id",0);
+							$(".pro-container").show();
+							$(".shopcontainer").hide();
+							$(".collnavleftcontent a").removeClass("collactive");
+							$(".collnavleftcontent a:first-child").addClass("collactive");
+						}
+					}
+					else if(index == 1){
+						if(!$(".colledit").is(":hidden")){
+							$(".collnavright").attr("id",1);
+							$(".pro-container").hide();
+							$(".shopcontainer").show();
+							$(".collnavleftcontent a").removeClass("collactive");
+							$(".collnavleftcontent a:last-child").addClass("collactive");
+						}
+					}
+				})
+				$(".colledit").click(function(){
+					console.log($(".collnavright").attr("id"))
+					if($(this).parent().attr("id") == 0){
+						$(".imgmask").show();	
+					}
+					if($(this).parent().attr("id") == 1){
+						$(".collcheckbox").show();
+						$(".enter").hide();
+					}
+					$(".complete").show();
+					$(".colledit").hide();
+					$(".collfoot").show();
+				})
+				$(".complete").click(function(){
+					console.log($(".collnavright").attr("id"))
+					if($(this).parent().attr("id") == 0){
+						$(".imgmask").hide();	
+					}
+					if($(this).parent().attr("id") == 1){
+						$(".collcheckbox").hide();
+						$(".enter").show();
+					}
+					$(".collfoot").hide();
+					$(".colledit").show();
+					$(".complete").hide();
+				});
+				$("input[name=all]").click(function(){
+					$("input[type=checkbox]").prop("checked",$(this).prop("checked"));
+				});
+				$("#colldelete").click(function(){
+					
+					if($(".collnavright").attr("id") == 0){
+						var ids = '';
+		                var valueList = new Array();
+		                $(".imgmask input:checked").each(function() {
+		                    valueList.push(this.value);
+		                });
+		                if (valueList.length == 0) {
+		                    alert("请先选择收藏的商品或店铺");
+		                    return false;
+		                }
+		                
+		                ids = valueList.join(',');
+		                deletecoll(ids,1);
+					}
+					else if($(".collnavright").attr("id") == 1){
+						var ids = '';
+		                var valueList = new Array();
+		                $(".collcheckbox:checked").each(function() {
+		                    valueList.push(this.value);
+		                });
+		                if (valueList.length == 0) {
+		                    alert("请先选择购物车商品");
+		                    return false;
+		                }
+		                
+		                ids = valueList.join(',');
+		                deletecoll(ids,2);
+					}
+				})
+				function deletecoll(ids,type){
+					jsonp("/user/core/delCollect?requestType=1&version=1.0","post",{ids:ids,type:type,shopId:shopId},function(data,status){
+						if(type == 1){
+							showCollectItem();
+						}
+						else if(type == 2){
+							showCollectShop();
+						}
+						
+					},function(err){
+						alert("出错了")
+					})
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,30 @@
+.collnav{position: fixed;width: 100%;overflow: hidden;border-bottom: 1px solid #eee;z-index: 22;background: #fff;}
+.collnavleft{width: 100%;float: left;margin-right: -71px;padding:10px 0;}
+.collnavleft .collnavleftcontent{margin-right: 71px;}
+.collnavleft .collnavleftcontent a{display: inline-block;text-align: center;width: 49%;}
+.collnavleft .collnavleftcontent a.collactive{color:#ef503a;}
+.collnavright{width: 70px;float: right;text-align: center;border-left: 1px solid #ccc;padding:10px 0;}
+.shop-item{padding:10px;border-bottom: 1px solid #eee;}
+.shopcontainer,.collfoot,.imgmask,.complete{display: none;}
+.shop-container{overflow: hidden;}
+.shop-container>a{float:right;width:90px;display: inline-block;text-align: center;padding:2px 0;border:1px solid #ef503a;border-radius: 4px;font-size: 14px;color:#ef503a;margin-top: 18px;}
+.shop-container .shop-img{width:60px;height:60px;float: left;}
+.shop-container .shop-img img{width:60px;height:60px;}
+.shop-container .shop-middle{width:100%;margin-right:-100px;margin-left:-60px;float: left;}
+.shop-container .shop-middle .shop-middle-content{margin-right:100px;margin-left:60px;padding:0 6px}
+.shop-container .shop-middle .shop-middle-content p{margin-bottom: 16px;color:#444;}
+.shop-container .shop-middle .shop-middle-content img{width:58px;}
+.collcontainer{padding-top: 42px;}
+.imgmask{position: absolute;top: 0;bottom: 0;width: 100%;background: rgba(0,0,0,0.6);}
+.imgmask input{float: right;margin: 10px;}
+.collfoot{position: fixed;bottom: 0;width: 100%;background: #fff;z-index: 22;height: 50px;line-height: 50px;}
+.collfoot a{display: block;width: 50%;float: left;text-align: center;}
+.collfoot a:last-child{background: #ef503a;color: #fff;}
+.collfoot a:first-child{background: #fff;border-top:1px solid #eee;}
+input[name=all]{margin-right: 4px;background: url(../images/icon_circle_unchosen.png) no-repeat center center;}
+.shop-container input{display: none;float: right;margin-top: 18px;background: url(../images/icon_circle_unchosen.png) no-repeat center center;}
+.shop-container input:checked,input[name=all]:checked{background: url(../images/icon_chosen.png) no-repeat center center;}
+input[type=checkbox]{-webkit-appearance: none;appearance: none;border: none;outline: none;width: 20px;height: 20px;background-size: 100%;vertical-align: middle;}
+input[type=checkbox]:checked{border-radius: 50%;background-size: 100%;}
+.imgmask input{background: url(../images/icon_unchosen.png) no-repeat center center;border-radius: 100%;}
+.imgmask input:checked{background: url(../images/icon_shoucangshangpin_xuanzhogn.png) no-repeat center center;background-size: 100%;}
